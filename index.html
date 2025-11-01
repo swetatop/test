@@ -10,7 +10,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <style>
-        /* ВАШ УНИКАЛЬНЫЙ СТИЛЬ */
         :root {
             --bg: #0D0F15;
             --card: #1A1D25;
@@ -23,8 +22,6 @@
             --text-gray: #CCCCCC;
             --success: #4CAF50;
             --error: #f44336;
-            --link-color: #6D9C52;
-            --link-hover: #7DAC62;
             --warning: #ff9800;
             --info: #2196F3;
         }
@@ -41,20 +38,10 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            padding-bottom: 60px;
             font-family: 'Inter', Arial, sans-serif;
         }
         
-        h1, h2, h3, h4 {
-            font-family: 'Inter', Arial, sans-serif;
-            color: #FFFFFF;
-        }
-        
-        h1 { font-weight: 700; font-size: 2.5rem; }
-        h2 { font-weight: 600; font-size: 2rem; }
-        h3 { font-weight: 500; font-size: 1.5rem; }
-        
-        /* 🔥 УВЕДОМЛЕНИЯ */
+        /* Стили для уведомлений */
         .notification {
             position: fixed;
             top: 20px;
@@ -68,37 +55,17 @@
             font-weight: 500;
         }
         
-        .notification.success {
-            background: var(--success);
-            color: white;
-        }
-        
-        .notification.error {
-            background: var(--error);
-            color: white;
-        }
-        
-        .notification.warning {
-            background: var(--warning);
-            color: black;
-        }
-        
-        .notification.info {
-            background: var(--primary);
-            color: white;
-        }
+        .notification.success { background: var(--success); color: white; }
+        .notification.error { background: var(--error); color: white; }
+        .notification.warning { background: var(--warning); color: black; }
+        .notification.info { background: var(--primary); color: white; }
         
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
         
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-
-        /* 🔔 СИСТЕМА ОПОВЕЩЕНИЙ */
+        /* Система оповещений */
         .alert-banner {
             position: fixed;
             top: 0;
@@ -125,29 +92,10 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .alert-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .alert-icon {
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .alert-text {
-            flex: 1;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .alert-buttons {
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-        }
+        .alert-content { display: flex; align-items: center; gap: 12px; flex: 1; }
+        .alert-icon { font-size: 20px; flex-shrink: 0; }
+        .alert-text { flex: 1; font-size: 14px; line-height: 1.4; }
+        .alert-buttons { display: flex; gap: 10px; flex-shrink: 0; }
 
         .alert-btn {
             background: rgba(255,255,255,0.2);
@@ -160,9 +108,7 @@
             transition: all 0.3s ease;
         }
 
-        .alert-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
+        .alert-btn:hover { background: rgba(255,255,255,0.3); }
         
         /* User Panel */
         .user-panel {
@@ -183,7 +129,7 @@
             color: #FFFFFF;
         }
         
-        .admin-button {
+        .admin-button, .login-button {
             background: var(--primary);
             border: none;
             color: var(--text);
@@ -193,23 +139,7 @@
             font-size: 14px;
         }
         
-        .admin-button:hover {
-            background: var(--primary-hover);
-        }
-        
-        .login-button {
-            background: var(--primary);
-            border: none;
-            color: var(--text);
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .login-button:hover {
-            background: var(--primary-hover);
-        }
+        .admin-button:hover, .login-button:hover { background: var(--primary-hover); }
         
         /* Admin Panel */
         .admin-panel {
@@ -228,9 +158,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
         
-        .admin-panel.active {
-            display: block;
-        }
+        .admin-panel.active { display: block; }
         
         .admin-overlay {
             display: none;
@@ -244,9 +172,7 @@
             backdrop-filter: blur(5px);
         }
         
-        .admin-overlay.active {
-            display: block;
-        }
+        .admin-overlay.active { display: block; }
         
         .users-info {
             background: rgba(13, 15, 21, 0.6);
@@ -256,140 +182,7 @@
             border-left: 4px solid #6D9C52;
         }
         
-        .users-info p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #FFFFFF;
-        }
-        
-        /* Стили для системы логов */
-        .logs-section {
-            background: var(--card-gradient);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-        
-        .logs-list {
-            max-height: 300px;
-            overflow-y: auto;
-            background: rgba(26, 29, 37, 0.6);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .log-item {
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            background: rgba(42, 46, 58, 0.8);
-            border-radius: 6px;
-            border-left: 4px solid #6D9C52;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            color: #FFFFFF;
-        }
-        
-        .log-item:hover {
-            background: rgba(42, 46, 58, 0.9);
-            transform: translateX(2px);
-        }
-        
-        .log-time {
-            color: var(--text-gray);
-            font-size: 11px;
-            margin-right: 10px;
-        }
-        
-        .log-user {
-            color: #6D9C52;
-            font-weight: bold;
-        }
-        
-        /* Кнопки управления карточками */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .add-card-btn {
-            background: var(--primary);
-            color: var(--text);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .add-card-btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        
-        .delete-card-btn {
-            background: var(--error);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-left: 10px;
-            opacity: 0;
-            transition: all 0.3s ease;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-        
-        .chapter-card:hover .delete-card-btn {
-            opacity: 1;
-        }
-        
-        /* Модальное окно создания карточки */
-        .card-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-        }
-        
-        .card-modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .card-modal-content {
-            background: var(--card-gradient);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-        
-        /* Sidebar Styles */
+        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
@@ -404,14 +197,7 @@
             border-right: 1px solid rgba(255,255,255,0.1);
         }
         
-        .sidebar.active {
-            left: 0;
-        }
-        
-        .sidebar.active ~ .menu-toggle {
-            left: 260px;
-            transition: left 0.3s ease;
-        }
+        .sidebar.active { left: 0; }
         
         .menu-toggle {
             position: fixed;
@@ -426,13 +212,9 @@
             z-index: 1001;
             border-radius: 6px;
             transition: all 0.3s;
-            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .menu-toggle:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
+        .menu-toggle:hover { background: var(--primary-hover); transform: translateY(-2px); }
         
         .sidebar h2 {
             color: var(--text);
@@ -441,18 +223,10 @@
             font-size: 1.25rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
-            margin-top: 0;
         }
         
-        .sidebar-nav {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-        
-        .sidebar-nav li {
-            margin-bottom: 10px;
-            position: relative;
-        }
+        .sidebar-nav { list-style: none; margin-bottom: 30px; }
+        .sidebar-nav li { margin-bottom: 10px; }
         
         .sidebar-nav a {
             color: var(--text);
@@ -468,107 +242,22 @@
             background: rgba(42, 46, 58, 0.6);
         }
         
-        .sidebar-nav a:hover,
-        .sidebar-nav a.active {
+        .sidebar-nav a:hover, .sidebar-nav a.active {
             background: var(--primary);
             border-color: rgba(255,255,255,0.1);
             transform: translateY(-2px);
-        }
-        
-        .nav-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        
-        .discord-link {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .discord-link a {
-            color: var(--text);
-            text-decoration: none;
-            font-size: 14px;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-radius: 6px;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-            background: rgba(42, 46, 58, 0.6);
-        }
-        
-        .discord-link a:hover {
-            background: var(--primary);
-            border-color: rgba(255,255,255,0.1);
-            transform: translateY(-2px);
-        }
-        
-        /* Enhanced Dropdown Styles */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            left: 100%;
-            top: 0;
-            background: rgba(26, 29, 37, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 8px;
-            padding: 15px;
-            min-width: 280px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            z-index: 1002;
-        }
-        
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        
-        .dropdown-section {
-            margin-bottom: 15px;
-        }
-        
-        .dropdown-section:last-child {
-            margin-bottom: 0;
-        }
-        
-        .dropdown-section-title {
-            color: var(--text-gray);
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-transform: uppercase;
-        }
-        
-        .dropdown-content a {
-            margin-bottom: 5px;
-            font-size: 13px;
-            padding: 8px 12px;
-            display: block;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            color: #FFFFFF;
-            text-decoration: none;
-        }
-        
-        .dropdown-content a:hover {
-            background: var(--primary);
         }
         
         /* Main Content */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 100px 20px 40px;
+            padding: 100px 20px 100px;
         }
+        
+        /* Pages */
+        .page { display: none; }
+        .page.active { display: block; }
         
         /* Welcome Section */
         .welcome-section {
@@ -579,21 +268,6 @@
             margin-bottom: 40px;
             text-align: center;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-        }
-        
-        .welcome-section h1 {
-            color: #FFFFFF;
-            margin-bottom: 15px;
-            font-size: 2rem;
-        }
-        
-        .welcome-section p {
-            color: var(--text-gray);
-            font-size: 1.1rem;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
         }
         
         /* Quick Cards */
@@ -617,29 +291,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
         }
         
         .card:hover {
             background: var(--card-gradient-hover);
             border-color: rgba(255,255,255,0.2);
             transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        }
-        
-        .card h3 {
-            font-size: 1.5rem;
-            color: #FFFFFF;
-        }
-        
-        /* Pages */
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
         }
         
         /* Chapters Grid */
@@ -662,23 +319,30 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
             position: relative;
         }
         
         .chapter-card:hover {
             background: var(--card-gradient-hover);
             transform: translateY(-8px) scale(1.02);
-            border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
         
-        .chapter-card h4 {
-            font-size: 1.1rem;
-            color: #FFFFFF;
-            line-height: 1.4;
+        .delete-card-btn {
+            background: var(--error);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
+        
+        .chapter-card:hover .delete-card-btn { opacity: 1; }
         
         /* Content Pages */
         .content-page {
@@ -688,148 +352,8 @@
             padding: 30px;
             margin-top: 20px;
             min-height: 500px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
         
-        .content-header {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        .content-body {
-            line-height: 1.8;
-            color: var(--text-gray);
-            margin-bottom: 30px;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .content-body a {
-            color: #6D9C52 !important;
-            text-decoration: none !important;
-            border-bottom: 1px solid #6D9C52;
-            transition: all 0.3s ease;
-            cursor: pointer !important;
-        }
-        
-        .content-body a:hover {
-            color: #7DAC62 !important;
-            border-bottom: 1px solid #7DAC62;
-        }
-        
-        .content-body ul, .content-body ol {
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-        
-        .content-body li {
-            margin-bottom: 5px;
-            color: #FFFFFF;
-        }
-        
-        .content-body code {
-            background: rgba(13, 15, 21, 0.8);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            color: #FFFFFF;
-        }
-        
-        .content-body pre {
-            background: rgba(13, 15, 21, 0.8);
-            padding: 15px;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin: 15px 0;
-            color: #FFFFFF;
-        }
-        
-        .content-body blockquote {
-            border-left: 4px solid #6D9C52;
-            padding-left: 15px;
-            margin: 15px 0;
-            color: var(--text-gray);
-            font-style: italic;
-        }
-        
-        .edit-section {
-            background: rgba(42, 46, 58, 0.6);
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-            border-left: 4px solid transparent;
-            border-image: var(--primary);
-            border-image-slice: 1;
-        }
-        
-        .edit-textarea {
-            width: 100%;
-            height: 300px;
-            background: rgba(13, 15, 21, 0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 6px;
-            color: var(--text);
-            padding: 15px;
-            font-size: 1rem;
-            resize: vertical;
-            margin-bottom: 15px;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .edit-textarea:focus {
-            outline: none;
-            border-color: #6D9C52;
-            box-shadow: 0 0 10px rgba(109, 156, 82, 0.3);
-        }
-        
-        .edit-button {
-            background: var(--primary);
-            color: var(--text);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .edit-button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-        
-        /* Navigation Buttons */
-        .nav-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .nav-btn {
-            background: var(--primary);
-            color: var(--text);
-            border: none;
-            padding: 15px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-        
-        .nav-btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-3px);
-        }
-        
-        /* Back Button */
         .back-button {
             background: var(--primary);
             color: var(--text);
@@ -840,234 +364,37 @@
             font-size: 1rem;
             margin-bottom: 30px;
             transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .back-button:hover {
-            background: var(--primary-hover);
-            transform: translateX(-3px) translateY(-2px);
-        }
+        .back-button:hover { background: var(--primary-hover); transform: translateX(-3px); }
         
-        /* RP Tasks Section */
-        .rp-tasks {
-            margin-top: 50px;
-        }
-        
-        /* Footer */
-        .footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            padding: 20px;
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            background: rgba(26, 29, 37, 0.8);
-            backdrop-filter: blur(10px);
-        }
-        
-        .footer p {
-            margin: 0;
-            opacity: 0.8;
-        }
-        
-        /* 📱 АДАПТИВНОСТЬ */
-        @media (max-width: 768px) {
-            .container {
-                padding: 80px 15px 40px;
-            }
-            
-            .user-panel {
-                position: static;
-                margin-bottom: 20px;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            
-            .sidebar {
-                width: 250px;
-                left: -250px;
-            }
-            
-            .sidebar.active ~ .menu-toggle {
-                left: 210px;
-            }
-            
-            .dropdown-content {
-                position: static;
-                display: none;
-                background: rgba(42, 46, 58, 0.8);
-                margin-top: 5px;
-                border-radius: 6px;
-            }
-            
-            .dropdown.active .dropdown-content {
-                display: block;
-            }
-            
-            .editor-toolbar {
-                gap: 3px;
-                padding: 8px;
-                overflow-x: auto;
-            }
-            
-            .editor-btn {
-                padding: 6px 8px;
-                font-size: 12px;
-            }
-            
-            .quick-cards {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .chapters-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .nav-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .welcome-section {
-                padding: 20px;
-            }
-            
-            .welcome-section h1 {
-                font-size: 1.5rem;
-            }
-            
-            .content-page {
-                padding: 20px;
-            }
-            
-            .menu-toggle {
-                top: 10px;
-                left: 10px;
-                padding: 8px 12px;
-                font-size: 14px;
-            }
-
-            .alert-banner {
-                padding: 12px 15px;
-            }
-
-            .alert-content {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .alert-buttons {
-                align-self: flex-end;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .auth-content, .card-modal-content {
-                padding: 20px;
-                margin: 10px;
-            }
-            
-            .editor-toolbar {
-                justify-content: flex-start;
-            }
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #6D9C52;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .loading-text {
-            text-align: center;
-            color: var(--text-gray);
-            margin-top: 10px;
-        }
-
-        /* Стили для изображений */
-        .content-body img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 15px 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* WYSIWYG Editor Styles */
-        .editor-toolbar {
-            background: var(--card);
-            border: 1px solid var(--accent);
-            border-radius: 8px 8px 0 0;
-            padding: 10px;
+        .section-header {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 5px;
-            border-bottom: none;
+            gap: 15px;
         }
         
-        .editor-btn {
-            background: var(--accent);
-            border: 1px solid rgba(255,255,255,0.1);
+        .add-card-btn {
+            background: var(--primary);
             color: var(--text);
-            padding: 8px 12px;
-            border-radius: 4px;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .editor-btn:hover {
-            background: var(--primary);
-        }
+        .add-card-btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
         
-        .editor-content {
-            min-height: 300px;
-            background: var(--card);
-            border: 1px solid var(--accent);
-            border-radius: 0 0 8px 8px;
-            padding: 15px;
-            color: var(--text);
-            line-height: 1.6;
-            outline: none;
-        }
-
-        /* ВАШ УНИКАЛЬНЫЙ BACKGROUND */
-        .background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(42, 46, 58, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(42, 58, 26, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(93, 140, 66, 0.15) 0%, transparent 50%);
-            z-index: -1;
-        }
-
-        /* Auth Modal */
-        .auth-modal {
+        /* Modals */
+        .auth-modal, .card-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -1079,44 +406,32 @@
             backdrop-filter: blur(5px);
         }
         
-        .auth-modal.active {
+        .auth-modal.active, .card-modal.active {
             display: flex;
             align-items: center;
             justify-content: center;
         }
         
-        .auth-content {
+        .auth-content, .card-modal-content {
             background: var(--card-gradient);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 12px;
             padding: 30px;
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
         
-        .form-group {
-            margin-bottom: 15px;
-        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--text-gray); }
         
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--text-gray);
-        }
-        
-        .form-group input {
+        .form-group input, .form-group textarea {
             width: 100%;
             padding: 10px;
             background: rgba(13, 15, 21, 0.8);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 6px;
             color: var(--text);
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #6D9C52;
         }
         
         .auth-button {
@@ -1130,50 +445,114 @@
             margin-top: 10px;
         }
         
-        .auth-button:hover {
-            background: var(--primary-hover);
-        }
+        .auth-button:hover { background: var(--primary-hover); }
         
+        /* Background */
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(42, 46, 58, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(42, 58, 26, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(93, 140, 66, 0.15) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(26, 29, 37, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .footer p {
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        /* Auth Message */
         .auth-message {
             margin-top: 10px;
             padding: 10px;
             border-radius: 4px;
             text-align: center;
             display: none;
+            font-size: 14px;
         }
-        
+
         .auth-message.success {
             background: rgba(76, 175, 80, 0.2);
             border: 1px solid var(--success);
             display: block;
+            color: var(--success);
         }
-        
+
         .auth-message.error {
             background: rgba(244, 67, 54, 0.2);
             border: 1px solid var(--error);
             display: block;
+            color: var(--error);
         }
 
-        /* Кнопка добавления раздела на главной */
-        .add-section-btn {
-            background: var(--primary);
+        /* Content Header */
+        .content-header {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .content-body {
+            line-height: 1.6;
+            color: var(--text-gray);
+        }
+
+        .content-body h1, .content-body h2, .content-body h3 {
             color: var(--text);
-            border: none;
-            padding: 15px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .add-section-btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
+            margin-bottom: 15px;
         }
 
-        /* Секция оповещений в админ-панели */
+        .content-body p {
+            margin-bottom: 15px;
+        }
+
+        /* Discord Link */
+        .discord-link {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .discord-link a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            background: rgba(42, 46, 58, 0.6);
+        }
+
+        .discord-link a:hover {
+            background: var(--primary);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        /* Alerts Management */
         .alerts-management {
             background: var(--card-gradient);
             border: 1px solid rgba(255,255,255,0.1);
@@ -1182,28 +561,18 @@
             margin-top: 20px;
         }
 
-        .alerts-list {
-            max-height: 200px;
-            overflow-y: auto;
-            background: rgba(26, 29, 37, 0.6);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .alert-item {
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            background: rgba(42, 46, 58, 0.8);
-            border-radius: 6px;
-            border-left: 4px solid #2196F3;
-            font-size: 13px;
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container { padding: 80px 15px 100px; }
+            .user-panel { position: static; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+            .sidebar { width: 250px; left: -250px; }
+            .quick-cards, .chapters-grid { grid-template-columns: 1fr; }
+            .footer { padding: 12px; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
-    <!-- 🔔 СИСТЕМА ОПОВЕЩЕНИЙ -->
+    <!-- Система оповещений -->
     <div class="alert-banner" id="alert-banner">
         <div class="alert-content">
             <span class="alert-icon">ℹ️</span>
@@ -1215,63 +584,38 @@
         </div>
     </div>
 
-    <!-- ВАШ УНИКАЛЬНЫЙ BACKGROUND -->
     <div class="background-overlay"></div>
     
     <!-- Auth Modal -->
     <div class="auth-modal">
         <div class="auth-content">
             <h3 style="text-align: center; margin-bottom: 20px;">Вхід для адміністратора</h3>
-            
-            <div class="auth-form active" id="login-form">
-                <div class="form-group">
-                    <label>Логін:</label>
-                    <input type="text" id="login-username" placeholder="Введіть логін">
-                </div>
-                <div class="form-group">
-                    <label>Пароль:</label>
-                    <input type="password" id="login-password" placeholder="Введіть пароль">
-                </div>
-                <button class="auth-button" onclick="login()">Увійти</button>
-                <div class="auth-message" id="login-message"></div>
+            <div class="form-group">
+                <label>Логін:</label>
+                <input type="text" id="login-username" placeholder="Введіть логін">
             </div>
+            <div class="form-group">
+                <label>Пароль:</label>
+                <input type="password" id="login-password" placeholder="Введіть пароль">
+            </div>
+            <button class="auth-button" onclick="login()">Увійти</button>
+            <div class="auth-message" id="login-message"></div>
         </div>
     </div>
 
     <!-- Card Creation Modal -->
     <div class="card-modal">
         <div class="card-modal-content">
-            <h3 style="text-align: center; margin-bottom: 20px;" id="card-modal-title">Створити новий розділ</h3>
-            
+            <h3 style="text-align: center; margin-bottom: 20px;" id="card-modal-title">Додати матеріал</h3>
             <div class="form-group">
-                <label>Тип розділу:</label>
-                <select id="section-type" class="form-group input" style="width: 100%; padding: 10px; background: rgba(13, 15, 21, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--text);">
-                    <option value="exam">Іспит</option>
-                    <option value="lecture">Лекція</option>
-                    <option value="training">Тренування</option>
-                    <option value="task">РП Завдання</option>
-                </select>
+                <label>Назва:</label>
+                <input type="text" id="new-card-title" placeholder="Введіть назву">
             </div>
-
             <div class="form-group">
-                <label>Назва розділу:</label>
-                <input type="text" id="new-card-title" placeholder="наприклад: Стрільба з автомата">
+                <label>Опис:</label>
+                <textarea id="new-card-content" placeholder="Опишіть зміст..." rows="6"></textarea>
             </div>
-
-            <div class="form-group">
-                <label>Опис розділу:</label>
-                <div class="editor-toolbar">
-                    <button class="editor-btn" onclick="formatText('bold')" title="Жирний"><b>B</b></button>
-                    <button class="editor-btn" onclick="formatText('italic')" title="Курсив"><i>I</i></button>
-                    <button class="editor-btn" onclick="formatText('insertUnorderedList')" title="Маркований список">≡</button>
-                    <button class="editor-btn" onclick="uploadImage()" title="Додати фото">📷</button>
-                </div>
-                <div class="editor-content" id="new-card-content" contenteditable="true">
-                    Опишіть зміст розділу...
-                </div>
-            </div>
-            
-            <button class="auth-button" onclick="createNewCard()">Створити розділ</button>
+            <button class="auth-button" onclick="createNewCard()">Створити</button>
             <button class="auth-button" onclick="closeCardModal()" style="background: var(--error); margin-top: 10px;">Скасувати</button>
         </div>
     </div>
@@ -1280,7 +624,6 @@
     <div class="admin-overlay"></div>
     <div class="admin-panel">
         <h3>Панель адміністратора</h3>
-        
         <div class="users-info">
             <p><strong>Поточний адмін:</strong> <span id="current-admin">admin</span></p>
         </div>
@@ -1292,24 +635,12 @@
             <button class="auth-button" onclick="addUser()" style="margin-top: 10px;">Додати адміністратора</button>
         </div>
 
-        <!-- Секция управления оповещениями -->
         <div class="alerts-management">
             <h4>📢 Керування оповіщеннями</h4>
             <div class="form-group">
                 <label>Нове оповіщення:</label>
-                <input type="text" id="new-alert-text" placeholder="Коротко про оновлення сайту..." style="margin-bottom: 10px;">
+                <input type="text" id="new-alert-text" placeholder="Коротко про оновлення сайту...">
                 <button class="auth-button" onclick="createAlert()">Створити оповіщення</button>
-            </div>
-            
-            <div class="alerts-list" id="alerts-list">
-                <!-- Архив оповещений будет здесь -->
-            </div>
-        </div>
-        
-        <div class="logs-section">
-            <h4>Останні дії в системі:</h4>
-            <div class="logs-list" id="logs-list">
-                <!-- Логи будут здесь -->
             </div>
         </div>
         
@@ -1330,46 +661,16 @@
     <div class="sidebar">
         <h2>Military Academy</h2>
         <ul class="sidebar-nav">
-            <li><a href="#" class="nav-link active" data-page="home">
-                <span class="nav-icon">🏠</span>Головна
-            </a></li>
-            <li class="dropdown">
-                <a href="#" class="nav-link" data-page="exams">
-                    <span class="nav-icon">⚡</span>Іспити
-                </a>
-                <div class="dropdown-content">
-                    <!-- Динамически заполняется -->
-                </div>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="nav-link" data-page="lectures">
-                    <span class="nav-icon">📚</span>Лекції
-                </a>
-                <div class="dropdown-content">
-                    <!-- Динамически заполняется -->
-                </div>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="nav-link" data-page="training">
-                    <span class="nav-icon">💪</span>Тренування
-                </a>
-                <div class="dropdown-content">
-                    <!-- Динамически заполняется -->
-                </div>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="nav-link" data-page="tasks">
-                    <span class="nav-icon">🎯</span>РП Завдання
-                </a>
-                <div class="dropdown-content">
-                    <!-- Динамически заполняется -->
-                </div>
-            </li>
+            <li><a href="#" class="nav-link active" data-page="home">🏠 Головна</a></li>
+            <li><a href="#" class="nav-link" data-page="exams">⚡ Іспити</a></li>
+            <li><a href="#" class="nav-link" data-page="lectures">📚 Лекції</a></li>
+            <li><a href="#" class="nav-link" data-page="training">💪 Тренування</a></li>
+            <li><a href="#" class="nav-link" data-page="tasks">🎯 РП Завдання</a></li>
         </ul>
         
         <div class="discord-link">
             <a href="https://discord.com/users/808726131020791869" target="_blank">
-                <span class="nav-icon">💡</span>Для зворотного зв'язку та пропозицій: Discord
+                💡 Для зворотного зв'язку та пропозицій: Discord
             </a>
         </div>
     </div>
@@ -1381,13 +682,6 @@
             <div class="welcome-section">
                 <h1>Шановні інструктори!</h1>
                 <p>Цей сайт створений для допомоги інструкторам Military Academy у виконанні службових обов'язків, проведенні навчальних занять та підготовці курсантів.</p>
-                
-                <!-- Кнопка добавления раздела для админов -->
-                <div id="admin-add-section" style="display: none;">
-                    <button class="add-section-btn" onclick="showCardModal()">
-                        ➕ Додати розділ
-                    </button>
-                </div>
             </div>
 
             <div class="quick-cards">
@@ -1411,13 +705,11 @@
             <button class="back-button" onclick="showPage('home')">← Назад до головної</button>
             <div class="section-header">
                 <h2>Іспити</h2>
-                <button class="add-card-btn" onclick="showExamModal()">
+                <button class="add-card-btn" onclick="showCardModal('exam')">
                     ➕ Додати іспит
                 </button>
             </div>
-            <div class="chapters-grid" id="exams-grid">
-                <!-- Карточки иcпитов будут здесь -->
-            </div>
+            <div class="chapters-grid" id="exams-grid"></div>
         </div>
 
         <!-- Lectures Page -->
@@ -1425,13 +717,11 @@
             <button class="back-button" onclick="showPage('home')">← Назад до головної</button>
             <div class="section-header">
                 <h2>Лекції</h2>
-                <button class="add-card-btn" onclick="showLectureModal()">
+                <button class="add-card-btn" onclick="showCardModal('lecture')">
                     ➕ Додати лекцію
                 </button>
             </div>
-            <div class="chapters-grid" id="lectures-grid">
-                <!-- Карточки лекций будут здесь -->
-            </div>
+            <div class="chapters-grid" id="lectures-grid"></div>
         </div>
 
         <!-- Training Page -->
@@ -1439,13 +729,11 @@
             <button class="back-button" onclick="showPage('home')">← Назад до головної</button>
             <div class="section-header">
                 <h2>Тренування</h2>
-                <button class="add-card-btn" onclick="showTrainingModal()">
+                <button class="add-card-btn" onclick="showCardModal('training')">
                     ➕ Додати тренування
                 </button>
             </div>
-            <div class="chapters-grid" id="training-grid">
-                <!-- Карточки тренировок будут здесь -->
-            </div>
+            <div class="chapters-grid" id="training-grid"></div>
         </div>
 
         <!-- Tasks Page -->
@@ -1453,13 +741,11 @@
             <button class="back-button" onclick="showPage('home')">← Назад до головної</button>
             <div class="section-header">
                 <h2>РП Завдання</h2>
-                <button class="add-card-btn" onclick="showTaskModal()">
+                <button class="add-card-btn" onclick="showCardModal('task')">
                     ➕ Додати завдання
                 </button>
             </div>
-            <div class="chapters-grid" id="tasks-grid">
-                <!-- Карточки заданий будут здесь -->
-            </div>
+            <div class="chapters-grid" id="tasks-grid"></div>
         </div>
 
         <!-- Content Pages Container -->
@@ -1491,45 +777,32 @@
         // User management system
         let currentUser = null;
         let contentStorage = {};
-        let systemLogs = [];
         let systemAlerts = [];
         let currentCardType = '';
-        let alertTimeout = null;
 
-        // ===== 🔔 СИСТЕМА ОПОВЕЩЕНИЙ =====
+        // ===== СИСТЕМА ОПОВЕЩЕНИЙ =====
         function loadAlertsFromFirebase() {
             database.ref('systemAlerts').on('value', (snapshot) => {
                 const alerts = snapshot.val();
                 if (alerts) {
                     systemAlerts = alerts;
                     showActiveAlert();
-                    updateAlertsDisplay();
                 }
             });
         }
 
         function showActiveAlert() {
-            // Проверяем, не отключил ли пользователь оповещения
             if (localStorage.getItem('alertsDisabled') === 'true') return;
 
             const activeAlert = systemAlerts.find(alert => alert.active && !alert.archived);
             if (activeAlert) {
                 document.getElementById('alert-text').textContent = activeAlert.text;
                 document.getElementById('alert-banner').classList.add('active');
-                
-                // Автоматическое скрытие через 30 секунд
-                alertTimeout = setTimeout(() => {
-                    hideAlert();
-                }, 30000);
             }
         }
 
         function hideAlert() {
             document.getElementById('alert-banner').classList.remove('active');
-            if (alertTimeout) {
-                clearTimeout(alertTimeout);
-                alertTimeout = null;
-            }
         }
 
         function hideAlertPermanently() {
@@ -1539,8 +812,8 @@
         }
 
         function createAlert() {
-            if (!currentUser || currentUser.username !== 'Admin') {
-                showNotification('Тільки користувач Admin може створювати оповіщення', 'error');
+            if (!currentUser) {
+                showNotification('Для створення оповіщень потрібно увійти', 'error');
                 return;
             }
 
@@ -1564,282 +837,14 @@
                 .then(() => {
                     showNotification('Оповіщення створено!', 'success');
                     document.getElementById('new-alert-text').value = '';
-                    addSystemLog('alert_created', `Створено оповіщення: ${alertText.substring(0, 50)}...`);
                     showActiveAlert();
                 })
                 .catch(error => {
                     showNotification('Помилка створення оповіщення', 'error');
-                    console.error('Alert creation error:', error);
                 });
         }
 
-        function updateAlertsDisplay() {
-            const alertsList = document.getElementById('alerts-list');
-            if (!alertsList) return;
-
-            const activeAlerts = systemAlerts.filter(alert => !alert.archived);
-            
-            if (activeAlerts.length === 0) {
-                alertsList.innerHTML = '<p style="color: var(--text-gray); text-align: center;">Активних оповіщень немає</p>';
-                return;
-            }
-
-            alertsList.innerHTML = activeAlerts.map(alert => `
-                <div class="alert-item">
-                    <div style="display: flex; justify-content: between; align-items: start; gap: 10px;">
-                        <div style="flex: 1;">
-                            <div style="font-weight: 500; margin-bottom: 5px;">${alert.text}</div>
-                            <div style="font-size: 11px; color: var(--text-gray);">
-                                ${new Date(alert.createdAt).toLocaleString()} • ${alert.createdBy}
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 5px; flex-shrink: 0;">
-                            <button class="alert-btn" onclick="toggleAlert('${alert.id}')" 
-                                    style="background: ${alert.active ? 'var(--success)' : 'var(--error)'};">
-                                ${alert.active ? '✓' : '✗'}
-                            </button>
-                            <button class="alert-btn" onclick="archiveAlert('${alert.id}')" 
-                                    style="background: var(--warning);">
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function toggleAlert(alertId) {
-            const alert = systemAlerts.find(a => a.id === alertId);
-            if (alert) {
-                alert.active = !alert.active;
-                database.ref('systemAlerts').set(systemAlerts)
-                    .then(() => {
-                        showNotification(`Оповіщення ${alert.active ? 'активовано' : 'деактивовано'}`, 'success');
-                        updateAlertsDisplay();
-                        showActiveAlert();
-                    });
-            }
-        }
-
-        function archiveAlert(alertId) {
-            const alert = systemAlerts.find(a => a.id === alertId);
-            if (alert) {
-                alert.archived = true;
-                alert.active = false;
-                database.ref('systemAlerts').set(systemAlerts)
-                    .then(() => {
-                        showNotification('Оповіщення архівовано', 'success');
-                        updateAlertsDisplay();
-                        hideAlert();
-                    });
-            }
-        }
-
-        // ===== 📝 РЕДАКТИРОВАНИЕ НАЗВАНИЙ ПОДРАЗДЕЛОВ =====
-        function editCardTitle(cardId, event) {
-            if (!currentUser) return;
-            event.stopPropagation();
-            
-            const currentTitle = getPageTitle(cardId);
-            const newTitle = prompt('Введіть нову назву розділу:', currentTitle);
-            
-            if (newTitle && newTitle !== currentTitle) {
-                updateCardTitle(cardId, newTitle);
-            }
-        }
-
-        function updateCardTitle(cardId, newTitle) {
-            const content = contentStorage[cardId];
-            if (!content) return;
-            
-            // Обновляем заголовок в контенте
-            const newContent = content.replace(/<h1[^>]*>.*?<\/h1>/i, `<h1>${newTitle}</h1>`);
-            contentStorage[cardId] = newContent;
-            
-            saveContentToFirebase();
-            addSystemLog('title_edit', `Змінено назву розділу: "${getPageTitle(cardId)}" → "${newTitle}"`);
-            updateAllPages();
-            updateEnhancedMenu();
-            
-            showNotification(`Назву розділу оновлено!`, 'success');
-        }
-
-        // Обновляем функцию отображения карточек чтобы добавить кнопку редактирования
-        function updatePage(pageId, prefix) {
-            const grid = document.getElementById(`${pageId}-grid`);
-            if (!grid) return;
-            
-            const pageCards = Object.keys(contentStorage)
-                .filter(key => key.startsWith(prefix))
-                .sort();
-            
-            if (pageCards.length === 0) {
-                grid.innerHTML = '<p style="color: var(--text-gray); text-align: center; grid-column: 1/-1;">Розділи ще не додані</p>';
-                return;
-            }
-            
-            grid.innerHTML = pageCards.map(cardId => {
-                const title = getPageTitle(cardId);
-                const canEdit = currentUser && currentUser.isAdmin;
-                
-                return `
-                    <div class="chapter-card" onclick="showContentPage('${cardId}', '${title}')">
-                        <h4>${title}</h4>
-                        ${canEdit ? `
-                            <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px;">
-                                <button class="delete-card-btn" onclick="deleteCard('${cardId}', event)" title="Видалити розділ">
-                                    🗑️
-                                </button>
-                                <button class="delete-card-btn" onclick="editCardTitle('${cardId}', event)" 
-                                        style="background: var(--warning);" title="Змінити назву">
-                                    ✏️
-                                </button>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Также обновляем функцию логирования
-        function getActionText(action, details) {
-            const actions = {
-                'card_created': 'створив розділ',
-                'card_deleted': 'видалив розділ', 
-                'content_edit': 'відредаговав розділ',
-                'title_edit': 'змінив назву розділу',
-                'user_added': 'додав нового адміністратора',
-                'alert_created': 'створив оповіщення'
-            };
-            
-            return `${actions[action] || action} - ${details}`;
-        }
-
-        // ===== ИСПРАВЛЕННАЯ НАВИГАЦИЯ =====
-        function showPage(pageId) {
-            console.log('Showing page:', pageId);
-            
-            // Скрываем все страницы
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Показываем нужную страницу
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
-            
-            // Очищаем контент страниц
-            const contentPages = document.getElementById('content-pages');
-            if (contentPages) {
-                contentPages.innerHTML = '';
-            }
-            
-            // Обновляем активные ссылки в меню
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-page') === pageId) {
-                    link.classList.add('active');
-                }
-            });
-            
-            // Закрываем сайдбар на мобильных
-            if (window.innerWidth <= 768) {
-                const sidebar = document.querySelector('.sidebar');
-                if (sidebar) {
-                    sidebar.classList.remove('active');
-                }
-            }
-            
-            // Показываем кнопку меню
-            const menuToggle = document.querySelector('.menu-toggle');
-            if (menuToggle) {
-                menuToggle.style.display = 'block';
-            }
-        }
-
-        // ===== ИСПРАВЛЕННЫЕ ОБРАБОТЧИКИ =====
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded - setting up event listeners');
-            
-            // Обработчики для карточек на главной
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const pageId = this.getAttribute('data-page');
-                    console.log('Card clicked:', pageId);
-                    if (pageId) {
-                        showPage(pageId);
-                    }
-                });
-            });
-            
-            // Обработчики для ссылок в меню
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const pageId = this.getAttribute('data-page');
-                    console.log('Nav link clicked:', pageId);
-                    if (pageId) {
-                        showPage(pageId);
-                    }
-                });
-            });
-            
-            // Обработчик для кнопки меню
-            const menuToggle = document.querySelector('.menu-toggle');
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function() {
-                    const sidebar = document.querySelector('.sidebar');
-                    if (sidebar) {
-                        sidebar.classList.toggle('active');
-                        this.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Закрытие сайдбара при клике вне его
-            document.addEventListener('click', function(e) {
-                const sidebar = document.querySelector('.sidebar');
-                const menuToggle = document.querySelector('.menu-toggle');
-                
-                if (sidebar && menuToggle && 
-                    !sidebar.contains(e.target) && 
-                    !menuToggle.contains(e.target)) {
-                    sidebar.classList.remove('active');
-                    menuToggle.style.display = 'block';
-                }
-            });
-            
-            // Обработчики для модальных окон
-            const authModal = document.querySelector('.auth-modal');
-            const cardModal = document.querySelector('.card-modal');
-            
-            if (authModal) {
-                authModal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        this.classList.remove('active');
-                    }
-                });
-            }
-            
-            if (cardModal) {
-                cardModal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        closeCardModal();
-                    }
-                });
-            }
-
-            // Инициализация системы
-            initializeEnhancedSystem();
-        });
-
-        // ===== 🔥 СИСТЕМА УВЕДОМЛЕНИЙ =====
+        // ===== УВЕДОМЛЕНИЯ =====
         function showNotification(message, type = 'info', duration = 3000) {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
@@ -1847,396 +852,100 @@
             document.body.appendChild(notification);
             
             setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    if (document.body.contains(notification)) {
-                        document.body.removeChild(notification);
-                    }
-                }, 300);
+                notification.remove();
             }, duration);
-            
-            return notification;
         }
 
-        // ===== 🎯 ПОДТВЕРЖДЕНИЕ ДЕЙСТВИЙ =====
-        function confirmAction(message) {
-            return confirm(`⚠️ ${message}\n\nЦю дію неможливо скасувати!`);
-        }
-
-        // ===== 📸 СИСТЕМА ЗАГРУЗКИ ФОТО =====
-        function uploadImage() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
+        // ===== НАВИГАЦИЯ =====
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
             
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                // Проверяем размер файла (макс 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    showNotification('Файл занадто великий. Максимальний розмір: 5MB', 'error');
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageData = e.target.result;
-                    insertImageToEditor(imageData);
-                };
-                reader.readAsDataURL(file);
-            };
-            
-            input.click();
-        }
-
-        function insertImageToEditor(imageData) {
-            const editor = document.getElementById('new-card-content');
-            if (editor) {
-                const img = document.createElement('img');
-                img.src = imageData;
-                img.style.maxWidth = '100%';
-                img.style.height = 'auto';
-                img.style.borderRadius = '8px';
-                img.style.margin = '10px 0';
-                
-                editor.appendChild(img);
-                editor.focus();
-                showNotification('Зображення додано у редактор', 'success');
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
             }
-        }
-
-        // ===== 📝 WYSIWYG РЕДАКТОР =====
-        function formatText(command, value = null) {
-            document.execCommand(command, false, value);
-            document.getElementById('new-card-content').focus();
-        }
-
-        // ===== ENHANCED MENU SYSTEM =====
-        function updateEnhancedMenu() {
-            const sections = {
-                'exams': 'exam',
-                'lectures': 'lecture', 
-                'training': 'training',
-                'tasks': 'task'
-            };
             
-            Object.keys(sections).forEach(section => {
-                const dropdown = document.querySelector(`[data-page="${section}"] + .dropdown-content`);
-                if (dropdown) {
-                    dropdown.innerHTML = '';
-                    
-                    const sectionCards = Object.keys(contentStorage)
-                        .filter(key => key.startsWith(sections[section]))
-                        .sort();
-                    
-                    if (sectionCards.length > 0) {
-                        sectionCards.forEach(cardId => {
-                            const link = document.createElement('a');
-                            link.href = '#';
-                            link.textContent = getPageTitle(cardId);
-                            link.onclick = () => showContentPage(cardId, getPageTitle(cardId));
-                            dropdown.appendChild(link);
-                        });
-                    } else {
-                        const emptyMsg = document.createElement('div');
-                        emptyMsg.textContent = 'Розділи ще не додані';
-                        emptyMsg.style.color = 'var(--text-gray)';
-                        emptyMsg.style.padding = '8px 12px';
-                        emptyMsg.style.fontSize = '12px';
-                        dropdown.appendChild(emptyMsg);
-                    }
+            document.getElementById('content-pages').innerHTML = '';
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('active');
                 }
             });
         }
 
-        // ===== СОЗДАНИЕ НОВОГО РАЗДЕЛА =====
+        // ===== СОЗДАНИЕ ПОДРАЗДЕЛОВ =====
+        function showCardModal(sectionType) {
+            if (!currentUser) {
+                showNotification('Потрібно увійти як адміністратор', 'error');
+                return;
+            }
+            
+            currentCardType = sectionType;
+            const titles = {
+                'exam': 'Додати іспит',
+                'lecture': 'Додати лекцію', 
+                'training': 'Додати тренування',
+                'task': 'Додати завдання'
+            };
+            
+            document.getElementById('card-modal-title').textContent = titles[sectionType] || 'Додати матеріал';
+            document.getElementById('new-card-title').value = '';
+            document.getElementById('new-card-content').value = '';
+            
+            document.querySelector('.card-modal').classList.add('active');
+        }
+
         function createNewCard() {
             if (!currentUser) return;
             
-            const sectionType = document.getElementById('section-type').value;
             const cardTitle = document.getElementById('new-card-title').value.trim();
-            const cardContent = document.getElementById('new-card-content').innerHTML;
+            const cardContent = document.getElementById('new-card-content').value.trim();
             
             if (!cardTitle) {
-                showNotification('Будь ласка, введіть назву розділу', 'error');
+                showNotification('Будь ласка, введіть назву', 'error');
                 return;
             }
             
-            // Создаем уникальный ID на основе названия
-            const cardId = `${sectionType}-${cardTitle.toLowerCase().replace(/[^a-z0-9а-яіїєґ\s]/g, '').replace(/\s+/g, '-')}`;
+            const cardId = `${currentCardType}-${Date.now()}`;
+            const contentWithTitle = `<h1>${cardTitle}</h1><p>${cardContent || 'Опис відсутній'}</p>`;
             
-            if (contentStorage[cardId]) {
-                showNotification('Розділ з такою назвою вже існує!', 'error');
-                return;
-            }
-            
-            contentStorage[cardId] = cardContent;
+            contentStorage[cardId] = contentWithTitle;
             saveContentToFirebase();
-            addSystemLog('card_created', `Створено розділ: ${cardTitle}`);
             updateAllPages();
-            updateEnhancedMenu();
             closeCardModal();
             
-            showNotification(`Розділ "${cardTitle}" успішно створено!`, 'success');
+            showNotification(`"${cardTitle}" успішно створено!`, 'success');
         }
-
-        function showCardModal() {
-            if (!currentUser) {
-                showNotification('Для створення розділів потрібно увійти як адміністратор', 'error');
-                return;
-            }
-            
-            const modal = document.querySelector('.card-modal');
-            
-            // Сброс формы
-            document.getElementById('new-card-title').value = '';
-            document.getElementById('new-card-content').innerHTML = 'Опишіть зміст розділу...';
-            
-            modal.classList.add('active');
-        }
-
-        function showExamModal() { showCardModal('exam'); }
-        function showLectureModal() { showCardModal('lecture'); }
-        function showTrainingModal() { showCardModal('training'); }
-        function showTaskModal() { showCardModal('task'); }
 
         function closeCardModal() {
             document.querySelector('.card-modal').classList.remove('active');
         }
 
-        // ===== ОБНОВЛЕННАЯ ФУНКЦИЯ ПОКАЗА КОНТЕНТА =====
+        // ===== ПОКАЗ КОНТЕНТА =====
         function showContentPage(contentId, title) {
-            const pages = document.querySelectorAll('.page');
-            const contentPages = document.getElementById('content-pages');
-            
-            pages.forEach(page => page.classList.remove('active'));
-            contentPages.innerHTML = '';
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
             
             const parentPage = getParentPage(contentId);
-            const canEdit = currentUser && currentUser.isAdmin;
             
-            contentPages.innerHTML = `
+            document.getElementById('content-pages').innerHTML = `
                 <div class="page active">
                     <button class="back-button" onclick="showPage('${parentPage}')">← Назад</button>
                     <div class="content-page">
                         <div class="content-header">
                             <h2>${title}</h2>
                         </div>
-                        <div class="content-body" id="content-${contentId}">
+                        <div class="content-body">
                             ${contentStorage[contentId] || 'Контент ще не додано'}
                         </div>
-                        ${canEdit ? `
-                        <div class="edit-section">
-                            <h4>Редагувати контент:</h4>
-                            <div class="editor-toolbar">
-                                <button class="editor-btn" onclick="formatEditText('${contentId}', 'bold')" title="Жирний"><b>B</b></button>
-                                <button class="editor-btn" onclick="formatEditText('${contentId}', 'italic')" title="Курсив"><i>I</i></button>
-                                <button class="editor-btn" onclick="formatEditText('${contentId}', 'insertUnorderedList')" title="Маркований список">≡</button>
-                                <button class="editor-btn" onclick="uploadEditImage('${contentId}')" title="Додати фото">📷</button>
-                            </div>
-                            <div class="editor-content" id="edit-${contentId}" contenteditable="true">${contentStorage[contentId] || ''}</div>
-                            <button class="edit-button" onclick="saveContentItem('${contentId}')">Зберегти зміни</button>
-                        </div>
-                        ` : ''}
                     </div>
                 </div>
             `;
-            
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-page') === parentPage) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
-        // Функции для редактирования контента
-        function formatEditText(contentId, command, value = null) {
-            const editor = document.getElementById(`edit-${contentId}`);
-            if (editor) {
-                document.execCommand(command, false, value);
-                editor.focus();
-            }
-        }
-
-        function uploadEditImage(contentId) {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                if (file.size > 5 * 1024 * 1024) {
-                    showNotification('Файл занадто великий. Максимальний розмір: 5MB', 'error');
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageData = e.target.result;
-                    const editor = document.getElementById(`edit-${contentId}`);
-                    if (editor) {
-                        const img = document.createElement('img');
-                        img.src = imageData;
-                        img.style.maxWidth = '100%';
-                        img.style.height = 'auto';
-                        img.style.borderRadius = '8px';
-                        img.style.margin = '10px 0';
-                        
-                        editor.appendChild(img);
-                        editor.focus();
-                        showNotification('Зображення додано', 'success');
-                    }
-                };
-                reader.readAsDataURL(file);
-            };
-            
-            input.click();
-        }
-
-        function saveContentItem(contentId) {
-            if (!currentUser || !currentUser.isAdmin) return;
-            
-            const editor = document.getElementById(`edit-${contentId}`);
-            if (editor) {
-                contentStorage[contentId] = editor.innerHTML;
-                const contentElement = document.getElementById(`content-${contentId}`);
-                if (contentElement) {
-                    contentElement.innerHTML = contentStorage[contentId];
-                }
-                
-                addSystemLog('content_edit', `Відредаговано розділ: ${getPageTitle(contentId)}`);
-                saveContentToFirebase();
-                
-                showNotification('Зміни збережено!', 'success');
-            }
-        }
-
-        // ===== ОБНОВЛЕННАЯ ФУНКЦИЯ УДАЛЕНИЯ =====
-        function deleteCard(cardId, event) {
-            if (!currentUser) return;
-            event.stopPropagation();
-            
-            const cardTitle = getPageTitle(cardId);
-            
-            if (!confirmAction(`Видалити розділ "${cardTitle}"?`)) {
-                return;
-            }
-            
-            delete contentStorage[cardId];
-            saveContentToFirebase();
-            addSystemLog('card_deleted', `Видалено розділ: ${cardTitle}`);
-            updateAllPages();
-            updateEnhancedMenu();
-            showNotification(`Розділ "${cardTitle}" успішно видалено!`, 'success');
-        }
-
-        // ===== СИСТЕМА ЛОГОВ =====
-        function addSystemLog(action, details) {
-            if (!currentUser) return;
-            
-            const log = {
-                timestamp: new Date().toISOString(),
-                user: currentUser.username,
-                action: action,
-                details: details
-            };
-            
-            systemLogs.unshift(log);
-            if (systemLogs.length > 50) systemLogs = systemLogs.slice(0, 50);
-            
-            database.ref('systemLogs').set(systemLogs)
-                .catch(error => console.error('Error saving logs:', error));
-            
-            updateLogsDisplay();
-        }
-
-        function loadLogsFromFirebase() {
-            database.ref('systemLogs').on('value', (snapshot) => {
-                const logs = snapshot.val();
-                if (logs) {
-                    systemLogs = logs;
-                    updateLogsDisplay();
-                }
-            });
-        }
-
-        function updateLogsDisplay() {
-            const logsList = document.getElementById('logs-list');
-            if (!logsList) return;
-            
-            // Фильтруем логи - убираем входы/выходы
-            const filteredLogs = systemLogs.filter(log => 
-                !log.details.includes('ввійшов в систему') && 
-                !log.details.includes('вийшов з системи')
-            );
-            
-            logsList.innerHTML = filteredLogs.map(log => `
-                <div class="log-item">
-                    <span class="log-time">${new Date(log.timestamp).toLocaleString()}</span>
-                    <span class="log-user">${log.user}:</span>
-                    ${getActionText(log.action, log.details)}
-                </div>
-            `).join('');
-        }
-
-        // ===== УПРАВЛЕНИЕ КОНТЕНТОМ =====
-        function loadContentFromFirebase() {
-            database.ref('content').on('value', (snapshot) => {
-                const content = snapshot.val();
-                if (content) {
-                    contentStorage = content;
-                } else {
-                    initializeDefaultContent();
-                }
-                updateAllPages();
-                updateEnhancedMenu();
-            });
-        }
-
-        function updateAllPages() {
-            updatePage('exams', 'exam');
-            updatePage('lectures', 'lecture');
-            updatePage('training', 'training');
-            updatePage('tasks', 'task');
-        }
-
-        function initializeDefaultContent() {
-            // Восстанавливаем старые названия карточек
-            const defaultContent = {
-                'exam-basic': '<h1>Базовий іспит</h1><p>Основи військової служби та уставні взаємини</p>',
-                'exam-tactical': '<h1>Тактичний іспит</h1><p>Тактика ведення бою та управління підрозділом</p>',
-                'exam-firearms': '<h1>Іспит зі стрілебкої підготовки</h1><p>Теорія та практика стрільби з різних видів озброєння</p>',
-                
-                'lecture-tactics': '<h1>Тактика ведення бою</h1><p>Основи тактики, маневрування та координації дій</p>',
-                'lecture-communication': '<h1>Засоби зв\'язку та комунікації</h1><p>Робота з раціями, кодові фрази та протоколи зв\'язку</p>',
-                'lecture-first-aid': '<h1>Перша медична допомога</h1><p>Надання першої допомоги на полі бою</p>',
-                
-                'training-shooting': '<h1>Стрільба</h1><p>Тренування зі стрільби на полігоні</p>',
-                'training-physical': '<h1>Фізична підготовка</h1><p>Загальна фізична підготовка та спеціальні вправи</p>',
-                'training-tactical': '<h1>Тактичні тренування</h1><p>Відпрацювання тактичних прийомів на місцевості</p>',
-                
-                'task-patrol': '<h1>Патрулювання</h1><p>Організація та проведення патрулювання</p>',
-                'task-checkpoint': '<h1>Контрольно-пропускний пункт</h1><p>Робота на КПП та перевірка документів</p>',
-                'task-ambush': '<h1>Влаштування засідки</h1><p>Планування та проведення засідки</p>'
-            };
-            
-            contentStorage = defaultContent;
-            saveContentToFirebase();
-        }
-
-        function saveContentToFirebase() {
-            if (Object.keys(contentStorage).length > 0) {
-                database.ref('content').set(contentStorage)
-                    .catch(error => {
-                        console.error('Error saving content:', error);
-                        showNotification('Помилка збереження даних', 'error');
-                    });
-            }
         }
 
         function getParentPage(contentId) {
@@ -2252,7 +961,89 @@
             if (!content) return 'Без назви';
             
             const match = content.match(/<h1[^>]*>(.*?)<\/h1>/i);
-            return match ? match[1].replace(/<[^>]*>/g, '') : 'Без назви';
+            return match ? match[1] : 'Без назви';
+        }
+
+        // ===== УПРАВЛЕНИЕ КОНТЕНТОМ =====
+        function loadContentFromFirebase() {
+            database.ref('content').on('value', (snapshot) => {
+                const content = snapshot.val();
+                if (content) {
+                    contentStorage = content;
+                } else {
+                    initializeDefaultContent();
+                }
+                updateAllPages();
+            });
+        }
+
+        function updateAllPages() {
+            updatePage('exams', 'exam');
+            updatePage('lectures', 'lecture');
+            updatePage('training', 'training');
+            updatePage('tasks', 'task');
+        }
+
+        function updatePage(pageId, prefix) {
+            const grid = document.getElementById(`${pageId}-grid`);
+            if (!grid) return;
+            
+            const pageCards = Object.keys(contentStorage)
+                .filter(key => key.startsWith(prefix))
+                .sort();
+            
+            if (pageCards.length === 0) {
+                grid.innerHTML = '<p style="color: var(--text-gray); text-align: center; grid-column: 1/-1;">Матеріали ще не додані</p>';
+                return;
+            }
+            
+            grid.innerHTML = pageCards.map(cardId => {
+                const title = getPageTitle(cardId);
+                const canEdit = currentUser && currentUser.isAdmin;
+                
+                return `
+                    <div class="chapter-card" onclick="showContentPage('${cardId}', '${title}')">
+                        <h4>${title}</h4>
+                        ${canEdit ? `
+                            <button class="delete-card-btn" onclick="deleteCard('${cardId}', event)" title="Видалити">
+                                🗑️
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteCard(cardId, event) {
+            if (!currentUser) return;
+            event.stopPropagation();
+            
+            const cardTitle = getPageTitle(cardId);
+            
+            if (!confirm(`Видалити "${cardTitle}"?`)) return;
+            
+            delete contentStorage[cardId];
+            saveContentToFirebase();
+            updateAllPages();
+            
+            showNotification(`"${cardTitle}" видалено!`, 'success');
+        }
+
+        function initializeDefaultContent() {
+            contentStorage = {
+                'exam-basic': '<h1>Базовий іспит</h1><p>Основи військової служби та уставні взаємини</p>',
+                'exam-tactical': '<h1>Тактичний іспит</h1><p>Тактика ведення бою та управління підрозділом</p>',
+                'lecture-tactics': '<h1>Тактика ведення бою</h1><p>Основи тактики, маневрування та координації дій</p>',
+                'training-shooting': '<h1>Стрільба</h1><p>Тренування зі стрільби на полігоні</p>',
+                'task-patrol': '<h1>Патрулювання</h1><p>Організація та проведення патрулювання</p>'
+            };
+            saveContentToFirebase();
+        }
+
+        function saveContentToFirebase() {
+            if (Object.keys(contentStorage).length > 0) {
+                database.ref('content').set(contentStorage);
+            }
         }
 
         // ===== АУТЕНТИФИКАЦИЯ =====
@@ -2281,12 +1072,11 @@
                 })
                 .catch((error) => {
                     showMessage(message, 'Невірний логін або пароль', 'error');
-                    console.error('Login error:', error);
                 });
         }
 
         function logout() {
-            if (confirmAction('Ви дійсно бажаєте вийти?')) {
+            if (confirm('Ви дійсно бажаєте вийти?')) {
                 auth.signOut().then(() => {
                     showNotification('Ви успішно вийшли з системи', 'info');
                 });
@@ -2304,32 +1094,26 @@
             const userInfo = document.getElementById('user-info');
             const adminBtn = document.getElementById('admin-btn');
             const logoutBtn = document.getElementById('logout-btn');
-            const adminAddSection = document.getElementById('admin-add-section');
             
             if (currentUser) {
                 loginBtn.style.display = 'none';
                 userInfo.style.display = 'block';
                 adminBtn.style.display = 'block';
                 logoutBtn.style.display = 'block';
-                adminAddSection.style.display = 'block';
                 userInfo.textContent = currentUser.username;
             } else {
                 loginBtn.style.display = 'block';
                 userInfo.style.display = 'none';
                 adminBtn.style.display = 'none';
                 logoutBtn.style.display = 'none';
-                adminAddSection.style.display = 'none';
             }
         }
 
         // ===== АДМИН-ПАНЕЛЬ =====
         function showAdminPanel() {
             if (!currentUser) return;
-            
             document.querySelector('.admin-overlay').classList.add('active');
             document.querySelector('.admin-panel').classList.add('active');
-            updateLogsDisplay();
-            updateAlertsDisplay();
         }
 
         function closeAdminPanel() {
@@ -2355,30 +1139,49 @@
                     showNotification('Нового адміністратора успішно додано!', 'success');
                     document.getElementById('new-username').value = '';
                     document.getElementById('new-password').value = '';
-                    addSystemLog('user_added', `Додано нового адміністратора: ${username}`);
                 })
                 .catch((error) => {
                     showNotification('Помилка при створенні користувача', 'error');
-                    console.error('User creation error:', error);
                 });
         }
 
-        // ===== ИНИЦИАЛИЗАЦИЯ УЛУЧШЕННОЙ СИСТЕМЫ =====
-        function initializeEnhancedSystem() {
-            initializeData();
-            updateFavoritesDisplay();
-            
-            console.log(`
-            ===== MILITARY ACADEMY =====
-            ✅ Навігація: ACTIVE
-            ✅ Фото: ACTIVE  
-            ✅ Адмін-панель: ACTIVE
-            ✅ Оповіщення: ACTIVE
-            🚀 Система готова до роботи!
-            `);
-        }
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обработчики навигации
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    if (pageId) showPage(pageId);
+                });
+            });
 
-        function initializeData() {
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const pageId = this.getAttribute('data-page');
+                    if (pageId) showPage(pageId);
+                });
+            });
+
+            // Меню
+            document.querySelector('.menu-toggle').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+
+            // Модальные окна
+            document.querySelector('.auth-modal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            document.querySelector('.card-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeCardModal();
+            });
+
+            // Инициализация
+            initializeSystem();
+        });
+
+        function initializeSystem() {
             auth.onAuthStateChanged((user) => {
                 if (user) {
                     currentUser = {
@@ -2388,7 +1191,6 @@
                     };
                     updateUserPanel();
                     loadContentFromFirebase();
-                    loadLogsFromFirebase();
                     loadAlertsFromFirebase();
                 } else {
                     currentUser = null;
@@ -2397,10 +1199,6 @@
                     loadAlertsFromFirebase();
                 }
             });
-        }
-
-        function updateFavoritesDisplay() {
-            // Функция для обновления избранного (если нужно)
         }
     </script>
 </body>
