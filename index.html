@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     <style>
         :root {
             --bg: #0D0F15;
@@ -951,10 +952,201 @@
             padding: 2px 4px;
             border-radius: 3px;
         }
+
+        /* Стили для медиа-контента */
+        .media-upload-section {
+            background: rgba(42, 46, 58, 0.6);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #5D8C42;
+        }
+        
+        .media-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .media-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(13, 15, 21, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .media-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .media-item .file-icon {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: var(--text-gray);
+        }
+        
+        .media-item .file-name {
+            padding: 8px;
+            font-size: 12px;
+            color: var(--text);
+            word-break: break-all;
+            text-align: center;
+        }
+        
+        .media-item .delete-media {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .media-item:hover .delete-media {
+            opacity: 1;
+        }
+        
+        .upload-area {
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 15px 0;
+        }
+        
+        .upload-area:hover {
+            border-color: #5D8C42;
+            background: rgba(93, 140, 66, 0.1);
+        }
+        
+        .upload-area.dragover {
+            border-color: #5D8C42;
+            background: rgba(93, 140, 66, 0.2);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: var(--text-gray);
+        }
+        
+        .media-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .media-gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(13, 15, 21, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .media-gallery-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .media-gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .media-gallery-item .file-info {
+            padding: 10px;
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+        
+        /* Модальное окно просмотра медиа */
+        .media-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .media-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .media-modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+        
+        .media-modal-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 8px;
+        }
+        
+        .close-media-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .media-download-btn {
+            background: var(--primary);
+            color: var(--text);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 5px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <div class="background-overlay"></div>
+    
+    <!-- Модальное окно просмотра медиа -->
+    <div class="media-modal">
+        <div class="media-modal-content">
+            <button class="close-media-modal" onclick="closeMediaModal()">✕</button>
+            <img id="modal-media-image" src="" alt="">
+        </div>
+    </div>
     
     <!-- Auth Modal -->
     <div class="auth-modal">
@@ -1238,13 +1430,16 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const auth = firebase.auth();
+        const storage = firebase.storage();
 
         // User management system
         let currentUser = null;
         let contentStorage = {};
+        let mediaStorage = {};
         let systemLogs = [];
         let currentCardType = '';
         let isInitialLoad = true;
+        let currentContentId = '';
 
         // Initialize data
         function initializeData() {
@@ -1258,6 +1453,7 @@
                     };
                     updateUserPanel();
                     loadContentFromFirebase();
+                    loadMediaFromFirebase();
                     loadLogsFromFirebase();
                     
                     // Add login log
@@ -1266,11 +1462,13 @@
                     currentUser = null;
                     updateUserPanel();
                     loadContentFromFirebase();
+                    loadMediaFromFirebase();
                 }
             });
 
             // Initialize content listeners
             initContentListeners();
+            initMediaListeners();
             initLogsListeners();
             
             // Initialize content links
@@ -1280,9 +1478,289 @@
             initSearch();
         }
 
+        // НОВОЕ: Загрузка медиа из Firebase
+        function loadMediaFromFirebase() {
+            database.ref('media').once('value')
+                .then((snapshot) => {
+                    const media = snapshot.val();
+                    if (media) {
+                        mediaStorage = media;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading media:', error);
+                });
+        }
+
+        // НОВОЕ: Слушатель изменений медиа
+        function initMediaListeners() {
+            database.ref('media').on('value', (snapshot) => {
+                const media = snapshot.val();
+                if (media && JSON.stringify(media) !== JSON.stringify(mediaStorage)) {
+                    mediaStorage = media;
+                    if (currentContentId) {
+                        updateMediaDisplay(currentContentId);
+                    }
+                }
+            });
+        }
+
+        // НОВОЕ: Сохранение медиа в Firebase
+        function saveMediaToFirebase() {
+            database.ref('media').set(mediaStorage)
+                .then(() => {
+                    console.log('Media saved to Firebase');
+                })
+                .catch((error) => {
+                    console.error('Error saving media:', error);
+                });
+        }
+
+        // НОВОЕ: Функция для отображения секции медиа в редакторе контента
+        function showMediaSection(contentId) {
+            return `
+                <div class="media-upload-section">
+                    <h4>📎 Медіа-файли</h4>
+                    <p>Додайте зображення, схеми або документи до цього матеріалу</p>
+                    
+                    <div class="upload-area" id="upload-area-${contentId}" 
+                         onclick="document.getElementById('file-input-${contentId}').click()">
+                        <div class="upload-icon">📁</div>
+                        <p>Перетягніть файли сюди або клікніть для вибору</p>
+                        <small>Підтримуються: JPG, PNG, PDF, DOC</small>
+                    </div>
+                    
+                    <input type="file" id="file-input-${contentId}" 
+                           style="display: none;" multiple 
+                           onchange="handleFileUpload('${contentId}', this.files)">
+                    
+                    <div class="media-preview" id="media-preview-${contentId}">
+                        ${renderMediaPreview(contentId)}
+                    </div>
+                </div>
+            `;
+        }
+
+        // НОВОЕ: Рендер превью медиа
+        function renderMediaPreview(contentId) {
+            if (!mediaStorage[contentId] || Object.keys(mediaStorage[contentId]).length === 0) {
+                return '<p style="color: var(--text-gray); text-align: center;">Файлів ще не додано</p>';
+            }
+            
+            return Object.keys(mediaStorage[contentId]).map(mediaId => {
+                const media = mediaStorage[contentId][mediaId];
+                const isImage = media.type.startsWith('image/');
+                
+                return `
+                    <div class="media-item">
+                        ${isImage ? 
+                            `<img src="${media.url}" alt="${media.name}" onclick="viewMedia('${media.url}')">` :
+                            `<div class="file-icon">📄</div>`
+                        }
+                        <div class="file-name">${media.name}</div>
+                        ${currentUser ? `
+                            <button class="delete-media" onclick="deleteMedia('${contentId}', '${mediaId}')">×</button>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // НОВОЕ: Обработка загрузки файлов
+        function handleFileUpload(contentId, files) {
+            if (!currentUser) {
+                alert('Будь ласка, увійдіть як адміністратор');
+                return;
+            }
+            
+            for (let file of files) {
+                uploadFile(contentId, file);
+            }
+        }
+
+        // НОВОЕ: Загрузка файла в Firebase Storage
+        function uploadFile(contentId, file) {
+            const fileId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            const filePath = `media/${contentId}/${fileId}_${file.name}`;
+            const storageRef = storage.ref(filePath);
+            
+            const uploadTask = storageRef.put(file);
+            
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                },
+                (error) => {
+                    console.error('Upload error:', error);
+                    alert('Помилка завантаження файлу: ' + error.message);
+                },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        if (!mediaStorage[contentId]) {
+                            mediaStorage[contentId] = {};
+                        }
+                        
+                        mediaStorage[contentId][fileId] = {
+                            name: file.name,
+                            type: file.type,
+                            size: file.size,
+                            url: downloadURL,
+                            uploadedBy: currentUser.username,
+                            uploadedAt: new Date().toISOString()
+                        };
+                        
+                        saveMediaToFirebase();
+                        updateMediaDisplay(contentId);
+                        addSystemLog('media_uploaded', `Завантажено файл: ${file.name} для ${getPageTitle(contentId)}`);
+                        console.log('File available at', downloadURL);
+                    });
+                }
+            );
+        }
+
+        // НОВОЕ: Удаление медиа
+        function deleteMedia(contentId, mediaId) {
+            if (!currentUser) return;
+            
+            if (!confirm('Видалити цей файл?')) return;
+            
+            const media = mediaStorage[contentId][mediaId];
+            const filePath = `media/${contentId}/${mediaId}_${media.name}`;
+            
+            storage.ref(filePath).delete().then(() => {
+                delete mediaStorage[contentId][mediaId];
+                
+                if (Object.keys(mediaStorage[contentId]).length === 0) {
+                    delete mediaStorage[contentId];
+                }
+                
+                saveMediaToFirebase();
+                updateMediaDisplay(contentId);
+                addSystemLog('media_deleted', `Видалено файл: ${media.name}`);
+                
+            }).catch((error) => {
+                console.error('Error deleting file:', error);
+                alert('Помилка видалення файлу');
+            });
+        }
+
+        // НОВОЕ: Обновление отображения медиа
+        function updateMediaDisplay(contentId) {
+            const preview = document.getElementById(`media-preview-${contentId}`);
+            if (preview) {
+                preview.innerHTML = renderMediaPreview(contentId);
+            }
+        }
+
+        // НОВОЕ: Просмотр медиа в модальном окне
+        function viewMedia(url) {
+            document.getElementById('modal-media-image').src = url;
+            document.querySelector('.media-modal').classList.add('active');
+        }
+
+        // НОВОЕ: Закрытие модального окна медиа
+        function closeMediaModal() {
+            document.querySelector('.media-modal').classList.remove('active');
+        }
+
+        // НОВОЕ: Drag and Drop функционал
+        function initDragAndDrop(contentId) {
+            const uploadArea = document.getElementById(`upload-area-${contentId}`);
+            const fileInput = document.getElementById(`file-input-${contentId}`);
+            
+            if (!uploadArea) return;
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                uploadArea.classList.add('dragover');
+            }
+            
+            function unhighlight() {
+                uploadArea.classList.remove('dragover');
+            }
+            
+            uploadArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFileUpload(contentId, files);
+            }
+        }
+
+        // НОВОЕ: Рендер галереи медиа для просмотра
+        function renderMediaGallery(contentId) {
+            if (!mediaStorage[contentId] || Object.keys(mediaStorage[contentId]).length === 0) {
+                return '';
+            }
+            
+            const mediaItems = Object.keys(mediaStorage[contentId]).map(mediaId => {
+                const media = mediaStorage[contentId][mediaId];
+                const isImage = media.type.startsWith('image/');
+                
+                return `
+                    <div class="media-gallery-item">
+                        ${isImage ? 
+                            `<img src="${media.url}" alt="${media.name}" onclick="viewMedia('${media.url}')" style="cursor: pointer;">` :
+                            `<div class="file-icon">📄</div>`
+                        }
+                        <div class="file-info">
+                            <div><strong>${media.name}</strong></div>
+                            <div>${formatFileSize(media.size)}</div>
+                            <button class="media-download-btn" onclick="downloadFile('${media.url}', '${media.name}')">
+                                ⬇️ Завантажити
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            return `
+                <div class="media-section">
+                    <h3>📎 Прикріплені файли</h3>
+                    <div class="media-gallery">
+                        ${mediaItems}
+                    </div>
+                </div>
+            `;
+        }
+
+        // НОВОЕ: Форматирование размера файла
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // НОВОЕ: Скачивание файла
+        function downloadFile(url, filename) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+        }
+
         // ПОИСК - НОВАЯ ФУНКЦИЯ
         function initSearch() {
-            // Обработчик поиска
             document.getElementById('global-search').addEventListener('input', function(e) {
                 performSearch(e.target.value);
             });
@@ -1297,7 +1775,6 @@
             const results = [];
             const searchTerm = query.toLowerCase();
             
-            // Ищем по всем карточкам
             Object.keys(contentStorage).forEach(cardId => {
                 const content = contentStorage[cardId].toLowerCase();
                 const title = getPageTitle(cardId).toLowerCase();
@@ -1332,7 +1809,6 @@
             const end = Math.min(content.length, index + 100);
             let preview = content.substring(start, end);
             
-            // Подсветка найденного текста
             preview = preview.replace(new RegExp(searchTerm, 'gi'), match => 
                 `<mark>${match}</mark>`
             );
@@ -1377,7 +1853,6 @@
                     </div>
                 `;
                 
-                // Добавляем hover эффекты
                 document.querySelectorAll('.search-result-card').forEach(card => {
                     card.addEventListener('mouseenter', function() {
                         this.style.transform = 'translateY(-2px)';
@@ -1405,6 +1880,58 @@
             document.getElementById('search-results').style.display = 'none';
         }
 
+        // ОБНОВЛЕННАЯ ФУНКЦИЯ: Показ страницы контента с медиа
+        function showContentPage(contentId, title) {
+            pages.forEach(page => page.classList.remove('active'));
+            contentPages.innerHTML = '';
+            
+            const parentPage = getParentPage(contentId);
+            const navButtons = getNavigationButtons(contentId, parentPage);
+            const canEdit = currentUser && currentUser.isAdmin;
+            currentContentId = contentId;
+            
+            contentPages.innerHTML = `
+                <div class="page active">
+                    <button class="back-button" onclick="showPage('${parentPage}')">← Назад</button>
+                    <div class="content-page">
+                        <div class="content-header">
+                            <h2>${title}</h2>
+                        </div>
+                        <div class="content-body" id="content-${contentId}">
+                            ${renderMarkdown(contentStorage[contentId] || '# Контент ще не додано')}
+                        </div>
+                        
+                        <!-- НОВОЕ: Галерея медиа для просмотра -->
+                        ${renderMediaGallery(contentId)}
+                        
+                        ${canEdit ? `
+                        <div class="edit-section">
+                            <h4>Редагувати контент:</h4>
+                            <textarea class="edit-textarea" id="edit-${contentId}">${contentStorage[contentId] || ''}</textarea>
+                            <button class="edit-button" onclick="saveContentItem('${contentId}')">Зберегти зміни</button>
+                            <p><small>Використовуйте Markdown для форматування тексту</small></p>
+                            
+                            <!-- НОВОЕ: Секция загрузки медиа -->
+                            ${showMediaSection(contentId)}
+                        </div>
+                        ` : ''}
+                        ${navButtons}
+                    </div>
+                </div>
+            `;
+            
+            if (canEdit) {
+                setTimeout(() => initDragAndDrop(contentId), 100);
+            }
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === parentPage) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
         // Add system log
         function addSystemLog(action, details = '') {
             if (!currentUser) return;
@@ -1419,7 +1946,6 @@
             
             console.log('System log:', logEntry);
             
-            // Save to Firebase
             database.ref('logs').push(logEntry)
                 .then(() => {
                     console.log('Log saved to Firebase');
@@ -1437,7 +1963,6 @@
                     snapshot.forEach((childSnapshot) => {
                         logs.push(childSnapshot.val());
                     });
-                    // Reverse to show latest first
                     systemLogs = logs.reverse();
                     updateLogsDisplay();
                 })
@@ -1451,7 +1976,6 @@
             database.ref('logs').limitToLast(1).on('child_added', (snapshot) => {
                 const newLog = snapshot.val();
                 systemLogs.unshift(newLog);
-                // Keep only last 20 logs
                 if (systemLogs.length > 20) {
                     systemLogs.pop();
                 }
@@ -1495,7 +2019,9 @@
                 'user_created': 'створив нового користувача',
                 'content_saved': 'зберегли зміни в контенті',
                 'card_created': 'створив нову картку',
-                'card_deleted': 'видалив картку'
+                'card_deleted': 'видалив картку',
+                'media_uploaded': 'завантажив медіа-файл',
+                'media_deleted': 'видалив медіа-файл'
             };
             
             return actions[action] || action;
@@ -1511,7 +2037,6 @@
                     if (content) {
                         contentStorage = content;
                     } else {
-                        // Initialize with default content if no data exists
                         initializeDefaultContent();
                     }
                     updateAllPages();
@@ -1521,7 +2046,6 @@
                 .catch((error) => {
                     console.error('Error loading content:', error);
                     hideLoading();
-                    // Fallback to localStorage if Firebase fails
                     loadContentFromLocalStorage();
                     isInitialLoad = false;
                 });
@@ -1544,7 +2068,6 @@
             
             grid.innerHTML = '';
             
-            // Get all cards for this page
             const pageCards = Object.keys(contentStorage)
                 .filter(key => key.startsWith(prefix))
                 .sort();
@@ -1613,7 +2136,6 @@
             document.getElementById('new-card-id').value = '';
             document.getElementById('new-card-title').value = '';
             
-            // ФИКС: Используем правильное название в контенте
             const contentTitles = {
                 'exam': 'новий іспит',
                 'lecture': 'нова лекція',
@@ -1645,7 +2167,6 @@
                 return;
             }
             
-            // Validate card ID
             if (!/^[a-zA-Z0-9-]+$/.test(cardId)) {
                 alert('ID картки може містити тільки латинські літери, цифри та дефіси');
                 return;
@@ -1658,19 +2179,14 @@
                 return;
             }
             
-            // ФИКС: Сохраняем именно то название, которое ввел пользователь
             const finalContent = cardContent.replace(/^#\s+.+$/m, `# ${cardTitle}`);
             
-            // Add new card to storage
             contentStorage[fullCardId] = finalContent;
             
-            // Save to Firebase
             saveContentToFirebase();
             
-            // Add system log
             addSystemLog('card_created', `Створено картку: ${cardTitle} (${fullCardId})`);
             
-            // Update UI
             updateAllPages();
             closeCardModal();
             
@@ -1689,16 +2205,12 @@
                 return;
             }
             
-            // Remove card from storage
             delete contentStorage[cardId];
             
-            // Save to Firebase
             saveContentToFirebase();
             
-            // Add system log
             addSystemLog('card_deleted', `Видалено картку: ${cardTitle} (${cardId})`);
             
-            // Update UI
             updateAllPages();
             
             alert(`Картка "${cardTitle}" успішно видалена!`);
@@ -1743,7 +2255,6 @@
                 'task-weapon-cleaning': '# Чистка зброї\n\n*Текст ще не додано*'
             };
             
-            // Save default content to Firebase
             saveContentToFirebase();
         }
 
@@ -1755,7 +2266,6 @@
                 })
                 .catch((error) => {
                     console.error('Error saving content:', error);
-                    // Fallback to localStorage
                     saveContentToLocalStorage();
                 });
         }
@@ -1763,15 +2273,12 @@
         // Listen for content changes in real-time
         function initContentListeners() {
             database.ref('content').on('value', (snapshot) => {
-                // Игнорируем обновления, если это начальная загрузка
                 if (isInitialLoad) return;
                 
                 const content = snapshot.val();
                 if (content) {
-                    // Проверяем, действительно ли данные изменились
                     if (JSON.stringify(content) !== JSON.stringify(contentStorage)) {
                         contentStorage = content;
-                        // Update current page if content changed
                         updateCurrentPageContent();
                         updateAllPages();
                     }
@@ -1797,7 +2304,6 @@
 
         // Get page title from content ID
         function getPageTitle(contentId) {
-            // Try to extract title from content
             const content = contentStorage[contentId];
             if (content) {
                 const titleMatch = content.match(/^#\s+(.+)$/m);
@@ -1806,7 +2312,6 @@
                 }
             }
             
-            // Fallback to predefined titles
             const titles = {
                 'exam-prisyaga': 'Іспит | Присяга',
                 'exam-stroyoviy': 'Іспит | Стройовий статут',
@@ -1868,10 +2373,9 @@
 
         function hideLoading() {
             const contentPages = document.getElementById('content-pages');
-            // Проверяем, есть ли активный спиннер загрузки
             const loadingSpinner = contentPages.querySelector('.spinner');
             if (loadingSpinner) {
-                contentPages.innerHTML = ''; // Очищаем контент страниц
+                contentPages.innerHTML = '';
             }
         }
 
@@ -1890,7 +2394,6 @@
                 return;
             }
 
-            // Firebase authentication
             const email = `${username}@military-academy.com`;
             
             auth.signInWithEmailAndPassword(email, password)
@@ -1907,7 +2410,6 @@
         }
 
         function logout() {
-            // Add logout log
             if (currentUser) {
                 addSystemLog('user_logout', `Користувач ${currentUser.username} вийшов з системи`);
             }
@@ -1975,10 +2477,8 @@
                 .then((userCredential) => {
                     alert(`Адміністратор ${username} успішно доданий`);
                     
-                    // Add system log
                     addSystemLog('user_created', `Створено нового користувача: ${username}`);
                     
-                    // Clear form
                     document.getElementById('new-username').value = '';
                     document.getElementById('new-password').value = '';
                 })
@@ -2030,45 +2530,6 @@
             });
         }
 
-        function showContentPage(contentId, title) {
-            pages.forEach(page => page.classList.remove('active'));
-            contentPages.innerHTML = '';
-            
-            const parentPage = getParentPage(contentId);
-            const navButtons = getNavigationButtons(contentId, parentPage);
-            const canEdit = currentUser && currentUser.isAdmin;
-            
-            contentPages.innerHTML = `
-                <div class="page active">
-                    <button class="back-button" onclick="showPage('${parentPage}')">← Назад</button>
-                    <div class="content-page">
-                        <div class="content-header">
-                            <h2>${title}</h2>
-                        </div>
-                        <div class="content-body" id="content-${contentId}">
-                            ${renderMarkdown(contentStorage[contentId] || '# Контент ще не додано')}
-                        </div>
-                        ${canEdit ? `
-                        <div class="edit-section">
-                            <h4>Редагувати контент:</h4>
-                            <textarea class="edit-textarea" id="edit-${contentId}">${contentStorage[contentId] || ''}</textarea>
-                            <button class="edit-button" onclick="saveContentItem('${contentId}')">Зберегти зміни</button>
-                            <p><small>Використовуйте Markdown для форматування тексту</small></p>
-                        </div>
-                        ` : ''}
-                        ${navButtons}
-                    </div>
-                </div>
-            `;
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('data-page') === parentPage) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
         function saveContentItem(contentId) {
             if (!currentUser || !currentUser.isAdmin) return;
             
@@ -2077,10 +2538,8 @@
             const contentElement = document.getElementById(`content-${contentId}`);
             contentElement.innerHTML = renderMarkdown(contentStorage[contentId]);
             
-            // Add edit log
             addSystemLog('content_edit', `Відредаговано розділ: ${getPageTitle(contentId)}`);
             
-            // Save to Firebase
             saveContentToFirebase();
             
             alert('Зміни збережено! Всі користувачі побачать оновлення.');
@@ -2118,16 +2577,13 @@
             
             let html = text;
             
-            // Headers
             html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
             html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
             html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
             
-            // Bold and Italic
             html = html.replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>');
             html = html.replace(/\*(.*?)\*/gim, '<em>$1</em>');
             
-            // Links
             html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/gim, function(match, linkText, linkUrl) {
                 let finalUrl = linkUrl.trim();
                 if (!finalUrl.match(/^[a-zA-Z]+:\/\//)) {
@@ -2136,18 +2592,14 @@
                 return '<a href="' + finalUrl + '" target="_blank" rel="noopener noreferrer" style="color: #5D8C42 !important; text-decoration: none !important; border-bottom: 1px solid #5D8C42; cursor: pointer !important;">' + linkText + '</a>';
             });
             
-            // Line breaks
             html = html.replace(/\n/gim, '<br>');
             
-            // Lists
             html = html.replace(/^- (.*$)/gim, '<li>$1</li>');
             html = html.replace(/(<li>.*<\/li>)/gims, '<ul>$1</ul>');
             
-            // Code blocks
             html = html.replace(/`([^`]+)`/gim, '<code style="background: rgba(13,15,21,0.8); padding: 2px 6px; border-radius: 4px;">$1</code>');
             html = html.replace(/```([^`]+)```/gims, '<pre style="background: rgba(13,15,21,0.8); padding: 15px; border-radius: 6px; overflow-x: auto;">$1</pre>');
             
-            // Blockquotes
             html = html.replace(/^> (.*$)/gim, '<blockquote style="border-left: 4px solid #5D8C42; padding-left: 15px; margin: 15px 0; color: #CCCCCC; font-style: italic;">$1</blockquote>');
             
             return html;
@@ -2203,6 +2655,11 @@
                 closeCardModal();
             }
         });
+        document.querySelector('.media-modal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('media-modal')) {
+                closeMediaModal();
+            }
+        });
 
         // Initialize
         initializeData();
@@ -2214,6 +2671,7 @@
         Logging system: ACTIVE
         Instructions section: ADDED
         Search system: ADDED
+        Media system: ADDED
         Ready for use!
         `);
     </script>
