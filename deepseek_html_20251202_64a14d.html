@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестування GTA 5 | Система тестування модерації</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <!-- Екран завантаження -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader"></div>
+        <div class="loading-text">Завантаження системи...</div>
+    </div>
+
+    <!-- Основний контент -->
+    <div id="mainContent" class="main-content" style="display: none;">
+        <!-- Верхня частина з лого -->
+        <header class="main-header">
+            <div class="logo-container">
+                <!-- Логотип з ukraine-gta5.com.ua -->
+                <img src="https://ukraine-gta5.com.ua/assets/images/logo.png" 
+                     alt="Ukraine GTA V Logo" 
+                     class="main-logo"
+                     onerror="this.onerror=null; this.src='assets/logo.png';">
+                
+                <!-- Назва сайту -->
+                <div class="site-title">
+                    <h1>ТЕСТУВАННЯ GTA 5</h1>
+                    <div class="site-subtitle">Система тестування модерації</div>
+                </div>
+            </div>
+            
+            <!-- Декоративна лінія -->
+            <div class="title-line"></div>
+        </header>
+
+        <main class="auth-container">
+            <!-- Форма входу -->
+            <section class="auth-section" id="loginSection">
+                <div class="section-header">
+                    <h2>ВХІД ДО СИСТЕМИ</h2>
+                    <div class="section-line"></div>
+                </div>
+                
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Електронна пошта</label>
+                        <input type="email" 
+                               id="loginEmail" 
+                               name="email" 
+                               placeholder="ваш.email@example.com" 
+                               required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Пароль</label>
+                        <input type="password" 
+                               id="loginPassword" 
+                               name="password" 
+                               placeholder="••••••••" 
+                               required>
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="remember">
+                                <span>Запам'ятати мене</span>
+                            </label>
+                            <a href="#" class="forgot-password">Забули пароль?</a>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-login">
+                        <span class="btn-text">УВІЙТИ</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Роздільник -->
+            <div class="separator">
+                <div class="separator-line"></div>
+                <div class="separator-text">АБО</div>
+                <div class="separator-line"></div>
+            </div>
+
+            <!-- Форма реєстрації -->
+            <section class="auth-section" id="registerSection">
+                <div class="section-header">
+                    <h2>РЕЄСТРАЦІЯ</h2>
+                    <div class="section-line"></div>
+                </div>
+                
+                <form id="registerForm" class="auth-form">
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="regFirstName">Ім'я</label>
+                            <input type="text" 
+                                   id="regFirstName" 
+                                   name="firstName" 
+                                   placeholder="Іван" 
+                                   required>
+                        </div>
+                        
+                        <div class="form-group half">
+                            <label for="regLastName">Прізвище</label>
+                            <input type="text" 
+                                   id="regLastName" 
+                                   name="lastName" 
+                                   placeholder="Коваль" 
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regEmail">Електронна пошта</label>
+                        <input type="email" 
+                               id="regEmail" 
+                               name="email" 
+                               placeholder="ваш.email@example.com" 
+                               required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="regPassword">Пароль</label>
+                            <input type="password" 
+                                   id="regPassword" 
+                                   name="password" 
+                                   placeholder="••••••••" 
+                                   required>
+                        </div>
+                        
+                        <div class="form-group half">
+                            <label for="regConfirmPassword">Підтвердження пароля</label>
+                            <input type="password" 
+                                   id="regConfirmPassword" 
+                                   name="confirmPassword" 
+                                   placeholder="••••••••" 
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="agreeTerms" required>
+                            <span>Я погоджуюсь з <a href="#" class="terms-link">умовами використання</a></span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-register">
+                        <span class="btn-text">ЗАРЕЄСТРУВАТИСЯ</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </form>
+            </section>
+        </main>
+
+        <!-- Футер -->
+        <footer class="main-footer">
+            <div class="footer-line"></div>
+            <p>© 2024 Тестова система GTA 5. Всі права захищено.</p>
+            <p class="footer-note">Система тестування модерації | Ukraine GTA V Project</p>
+        </footer>
+    </div>
+
+    <!-- Підключення JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>
