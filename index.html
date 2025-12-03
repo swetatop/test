@@ -3,169 +3,542 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тестування GTA 5 | Система тестування модерації</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <title>Тестування GTA 5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
 </head>
 <body>
-    <!-- Екран завантаження -->
-    <div id="loadingScreen" class="loading-screen">
-        <div class="loader"></div>
-        <div class="loading-text">Завантаження системи...</div>
-    </div>
-
-    <!-- Основний контент -->
-    <div id="mainContent" class="main-content" style="display: none;">
-        <!-- Верхня частина з лого -->
-        <header class="main-header">
-            <div class="logo-container">
-                <!-- Логотип з ukraine-gta5.com.ua -->
-                <img src="https://ukraine-gta5.com.ua/assets/images/logo.png" 
-                     alt="Ukraine GTA V Logo" 
-                     class="main-logo"
-                     onerror="this.onerror=null; this.src='assets/logo.png';">
+    <div class="container">
+        <!-- ===== ГОЛОВНА СТОРІНКА ===== -->
+        <div id="mainPage" class="page active">
+            <header class="header">
+                <div class="site-title">ТЕСТУВАННЯ GTA 5</div>
+                <div class="title-line"></div>
+                <div class="site-subtitle">Система тестування модерації</div>
+            </header>
+            
+            <div class="buttons-container">
+                <button class="main-button login-btn" id="loginBtn">
+                    <span class="button-icon"><i class="fas fa-sign-in-alt"></i></span>
+                    <span class="button-text">ВХІД</span>
+                </button>
                 
-                <!-- Назва сайту -->
-                <div class="site-title">
-                    <h1>ТЕСТУВАННЯ GTA 5</h1>
-                    <div class="site-subtitle">Система тестування модерації</div>
+                <button class="main-button register-btn" id="registerBtn">
+                    <span class="button-icon"><i class="fas fa-user-plus"></i></span>
+                    <span class="button-text">РЕЄСТРАЦІЯ</span>
+                </button>
+            </div>
+            
+            <!-- Форма входу -->
+            <div id="loginForm" class="form-container" style="display: none;">
+                <div class="form-header">
+                    <h2><i class="fas fa-key"></i> ВХІД ДО СИСТЕМИ</h2>
+                    <div class="form-line"></div>
+                </div>
+                
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Електронна пошта</label>
+                        <input type="email" id="email" placeholder="ваш.email@example.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Пароль</label>
+                        <input type="password" id="password" placeholder="Введіть ваш пароль" required>
+                    </div>
+                    
+                    <button type="submit" class="form-btn login-form-btn">
+                        <i class="fas fa-sign-in-alt"></i> УВІЙТИ
+                    </button>
+                </form>
+                
+                <button class="back-btn" id="backFromLogin">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+            </div>
+            
+            <!-- Форма реєстрації -->
+            <div id="registerForm" class="form-container" style="display: none;">
+                <div class="form-header">
+                    <h2><i class="fas fa-user-plus"></i> РЕЄСТРАЦІЯ</h2>
+                    <div class="form-line"></div>
+                </div>
+                
+                <form id="registerFormElement">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName"><i class="fas fa-user"></i> Ім'я</label>
+                            <input type="text" id="firstName" placeholder="Іван" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName"><i class="fas fa-user"></i> Прізвище</label>
+                            <input type="text" id="lastName" placeholder="Коваль" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regEmail"><i class="fas fa-envelope"></i> Електронна пошта</label>
+                        <input type="email" id="regEmail" placeholder="ваш.email@example.com" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="regPassword"><i class="fas fa-lock"></i> Пароль</label>
+                            <input type="password" id="regPassword" placeholder="Придумайте пароль" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword"><i class="fas fa-lock"></i> Підтвердження пароля</label>
+                            <input type="password" id="confirmPassword" placeholder="Повторіть пароль" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="form-btn register-form-btn">
+                        <i class="fas fa-check"></i> ЗАРЕЄСТРУВАТИСЯ
+                    </button>
+                </form>
+                
+                <button class="back-btn" id="backFromRegister">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+            </div>
+        </div>
+        
+        <!-- ===== ОСОБИСТИЙ КАБІНЕТ ===== -->
+        <div id="dashboard" class="page">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <h2><i class="fas fa-user-circle"></i> ОСОБИСТИЙ КАБІНЕТ</h2>
+                    <div class="form-line"></div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Іван Коваль</div>
+                        <div class="user-email" id="userEmail">ivan@example.com</div>
+                        <div class="user-stats">
+                            <span><i class="fas fa-chart-line"></i> Тестів пройдено: <strong id="testsPassed">0</strong></span>
+                            <span><i class="fas fa-calendar"></i> Останній: <strong id="lastTestDate">-</strong></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Кнопка адмінки (тільки для адмінів) -->
+                    <button class="admin-panel-btn" id="adminPanelBtn" style="display: none;">
+                        <i class="fas fa-cogs"></i> АДМІН-ПАНЕЛЬ
+                    </button>
+                </div>
+                
+                <div class="dashboard-content">
+                    <!-- Доступні тести -->
+                    <div class="section">
+                        <h3><i class="fas fa-list-alt"></i> ДОСТУПНІ ТЕСТИ</h3>
+                        <div class="tests-grid" id="testsList">
+                            <div class="loading-tests">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Завантаження тестів...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Мої результати -->
+                    <div class="section">
+                        <h3><i class="fas fa-history"></i> ІСТОРІЯ ТЕСТУВАНЬ</h3>
+                        <div class="results-table">
+                            <div class="table-header">
+                                <div class="header-cell">Тест</div>
+                                <div class="header-cell">Дата</div>
+                                <div class="header-cell">Час</div>
+                                <div class="header-cell">Статус</div>
+                            </div>
+                            <div class="table-body" id="resultsList">
+                                <div class="empty-row">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>У вас ще немає результатів</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> ВИЙТИ З СИСТЕМИ
+                </button>
+            </div>
+        </div>
+        
+        <!-- ===== СТОРІНКА ТЕСТУ ===== -->
+        <div id="testPage" class="page">
+            <div class="test-container">
+                <div class="test-header">
+                    <div class="test-title" id="testTitle">Назва тесту</div>
+                    <div class="form-line"></div>
+                    <div class="test-meta">
+                        <span><i class="fas fa-clock"></i> Час: <strong id="timer">00:00</strong></span>
+                        <span><i class="fas fa-question-circle"></i> Питання: <strong id="questionCounter">0/0</strong></span>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span>Прогрес тесту</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                
+                <div class="question-block">
+                    <div class="question-number" id="questionNumber">ПИТАННЯ 1</div>
+                    <div class="question-text" id="questionText">
+                        Текст питання завантажується...
+                    </div>
+                </div>
+                
+                <div class="answers-block" id="answersContainer">
+                    <!-- Відповіді завантажуються динамічно -->
+                </div>
+                
+                <div class="test-controls">
+                    <button class="btn-secondary" id="prevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> Попереднє
+                    </button>
+                    <button class="btn-primary" id="nextBtn">
+                        Наступне <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn-success" id="finishBtn" style="display: none;">
+                        <i class="fas fa-flag-checkered"></i> Завершити тест
+                    </button>
+                </div>
+                
+                <button class="back-btn" id="backFromTest">
+                    <i class="fas fa-arrow-left"></i> Повернутися в кабінет
+                </button>
+            </div>
+        </div>
+        
+        <!-- ===== СТОРІНКА РЕЗУЛЬТАТІВ ===== -->
+        <div id="resultsPage" class="page">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2><i class="fas fa-trophy"></i> ТЕСТ ЗАВЕРШЕНО</h2>
+                    <div class="form-line"></div>
+                </div>
+                
+                <div class="results-content">
+                    <div class="result-card">
+                        <div class="result-icon">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <h3 class="result-title">Результат відправлено!</h3>
+                        <p class="result-message">
+                            Ваші відповіді успішно збережено та відправлено на перевірку адміністратору.
+                            Результати будуть опубліковані протягом 24 годин.
+                        </p>
+                    </div>
+                    
+                    <div class="test-details">
+                        <h4><i class="fas fa-info-circle"></i> Інформація про тест</h4>
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Тест:</span>
+                                <span class="detail-value" id="detailTestName">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Дата:</span>
+                                <span class="detail-value" id="detailDate">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Витрачений час:</span>
+                                <span class="detail-value" id="detailTime">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Статус:</span>
+                                <span class="detail-value status-waiting">ОЧІКУЄ ПЕРЕВІРКИ</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-primary" id="newTestBtn">
+                            <i class="fas fa-redo"></i> Пройти новий тест
+                        </button>
+                        <button class="btn-secondary" id="toDashboardBtn">
+                            <i class="fas fa-home"></i> Повернутися в кабінет
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===== АДМІН-ПАНЕЛЬ ===== -->
+        <div id="adminPage" class="page">
+            <div class="admin-container">
+                <div class="admin-header">
+                    <div class="admin-title">
+                        <h2><i class="fas fa-cogs"></i> АДМІН-ПАНЕЛЬ</h2>
+                        <button class="btn-secondary" id="backFromAdmin">
+                            <i class="fas fa-arrow-left"></i> До кабінету
+                        </button>
+                    </div>
+                    <div class="form-line"></div>
+                    
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="adminUsersCount">0</div>
+                                <div class="stat-label">Користувачів</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-list-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="adminTestsCount">0</div>
+                                <div class="stat-label">Тестів</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="adminResultsCount">0</div>
+                                <div class="stat-label">Результатів</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Таби адмін-панелі -->
+                <div class="admin-tabs">
+                    <div class="tab-navigation">
+                        <button class="tab-btn active" data-tab="users">
+                            <i class="fas fa-users"></i> Користувачі
+                        </button>
+                        <button class="tab-btn" data-tab="tests">
+                            <i class="fas fa-list-alt"></i> Тести
+                        </button>
+                        <button class="tab-btn" data-tab="results">
+                            <i class="fas fa-chart-bar"></i> Результати
+                        </button>
+                        <button class="tab-btn" data-tab="sync">
+                            <i class="fas fa-sync-alt"></i> Синхронізація
+                        </button>
+                    </div>
+                    
+                    <!-- Вкладка Користувачі -->
+                    <div class="tab-content active" id="tab-users">
+                        <div class="tab-header">
+                            <h3><i class="fas fa-users"></i> Усі користувачі</h3>
+                            <div class="search-box">
+                                <input type="text" id="userSearch" placeholder="Пошук користувача..." onkeyup="filterUsers()">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                        <div class="users-list" id="usersList">
+                            <!-- Користувачі завантажуються через JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Вкладка Тести -->
+                    <div class="tab-content" id="tab-tests">
+                        <div class="tab-header">
+                            <h3><i class="fas fa-list-alt"></i> Керування тестами</h3>
+                            <button class="btn-primary" id="addTestBtn">
+                                <i class="fas fa-plus"></i> Додати тест
+                            </button>
+                        </div>
+                        <div class="tests-list" id="testsAdminList">
+                            <!-- Тести завантажуються через JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Вкладка Результати -->
+                    <div class="tab-content" id="tab-results">
+                        <div class="tab-header">
+                            <h3><i class="fas fa-chart-bar"></i> Усі результати</h3>
+                            <div class="search-box">
+                                <input type="text" id="resultSearch" placeholder="Пошук результатів..." onkeyup="filterResults()">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                        <div class="results-admin-list" id="resultsAdminList">
+                            <!-- Результати завантажуються через JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Вкладка Синхронізація -->
+                    <div class="tab-content" id="tab-sync">
+                        <div class="tab-header">
+                            <h3><i class="fas fa-sync-alt"></i> Синхронізація з Firebase</h3>
+                        </div>
+                        <div class="sync-status">
+                            <div class="status-card">
+                                <h4><i class="fas fa-database"></i> Статус бази даних</h4>
+                                <div class="status-indicator" id="firebaseStatus">
+                                    <span class="status-dot offline"></span>
+                                    <span>Не підключено</span>
+                                </div>
+                                <p class="status-text" id="firebaseStatusText">
+                                    Очікування підключення до Firebase...
+                                </p>
+                            </div>
+                            
+                            <div class="sync-actions">
+                                <button class="btn-primary" onclick="forceSync()">
+                                    <i class="fas fa-sync"></i> Примусова синхронізація
+                                </button>
+                                <button class="btn-secondary" onclick="exportToJSON()">
+                                    <i class="fas fa-download"></i> Експорт у JSON
+                                </button>
+                                <button class="btn-secondary" onclick="importFromJSON()">
+                                    <i class="fas fa-upload"></i> Імпорт з JSON
+                                </button>
+                            </div>
+                            
+                            <div class="sync-info">
+                                <h4><i class="fas fa-info-circle"></i> Інформація про синхронізацію</h4>
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <span>Остання синхронізація:</span>
+                                        <strong id="lastSyncTime">Ніколи</strong>
+                                    </div>
+                                    <div class="info-item">
+                                        <span>Користувачів онлайн:</span>
+                                        <strong id="onlineUsers">0</strong>
+                                    </div>
+                                    <div class="info-item">
+                                        <span>Активних тестів:</span>
+                                        <strong id="activeTests">0</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Модальні вікна -->
+        <div class="modal-overlay" id="modalOverlay" style="display: none;">
+            <div class="modal" id="testModal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-list-alt"></i> <span id="modalTitle">Новий тест</span></h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="testForm">
+                        <input type="hidden" id="testId">
+                        <div class="form-group">
+                            <label for="testName">Назва тесту *</label>
+                            <input type="text" id="testName" placeholder="Введіть назву тесту" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="testDescription">Опис тесту</label>
+                            <textarea id="testDescription" rows="2" placeholder="Короткий опис тесту"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="testTime">Час (хвилини) *</label>
+                                <input type="number" id="testTime" min="1" max="180" value="30" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="testQuestions">Кількість питань *</label>
+                                <input type="number" id="testQuestions" min="1" value="10" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="testActive" checked>
+                                <span>Активний тест</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary modal-close" onclick="closeModal()">Скасувати</button>
+                    <button class="btn-primary" id="saveTestBtn">Зберегти тест</button>
                 </div>
             </div>
             
-            <!-- Декоративна лінія -->
-            <div class="title-line"></div>
-        </header>
-
-        <main class="auth-container">
-            <!-- Форма входу -->
-            <section class="auth-section" id="loginSection">
-                <div class="section-header">
-                    <h2>ВХІД ДО СИСТЕМИ</h2>
-                    <div class="section-line"></div>
+            <div class="modal" id="statusModal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-edit"></i> Змінити статус результату</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
                 </div>
-                
-                <form id="loginForm" class="auth-form">
+                <div class="modal-body">
+                    <div class="status-info" id="statusInfo"></div>
                     <div class="form-group">
-                        <label for="loginEmail">Електронна пошта</label>
-                        <input type="email" 
-                               id="loginEmail" 
-                               name="email" 
-                               placeholder="ваш.email@example.com" 
-                               required>
+                        <label for="statusSelect">Новий статус</label>
+                        <select id="statusSelect">
+                            <option value="waiting">🟡 Очікує перевірки</option>
+                            <option value="passed">🟢 Пройшов успішно</option>
+                            <option value="failed">🔴 Не пройшов</option>
+                        </select>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="loginPassword">Пароль</label>
-                        <input type="password" 
-                               id="loginPassword" 
-                               name="password" 
-                               placeholder="••••••••" 
-                               required>
-                        <div class="form-options">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="remember">
-                                <span>Запам'ятати мене</span>
-                            </label>
-                            <a href="#" class="forgot-password">Забули пароль?</a>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-login">
-                        <span class="btn-text">УВІЙТИ</span>
-                        <span class="btn-icon">→</span>
-                    </button>
-                </form>
-            </section>
-
-            <!-- Роздільник -->
-            <div class="separator">
-                <div class="separator-line"></div>
-                <div class="separator-text">АБО</div>
-                <div class="separator-line"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary modal-close" onclick="closeModal()">Скасувати</button>
+                    <button class="btn-primary" id="saveStatusBtn">Зберегти статус</button>
+                </div>
             </div>
-
-            <!-- Форма реєстрації -->
-            <section class="auth-section" id="registerSection">
-                <div class="section-header">
-                    <h2>РЕЄСТРАЦІЯ</h2>
-                    <div class="section-line"></div>
+            
+            <div class="modal" id="questionModal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-question-circle"></i> Додати питання</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
                 </div>
-                
-                <form id="registerForm" class="auth-form">
-                    <div class="form-row">
-                        <div class="form-group half">
-                            <label for="regFirstName">Ім'я</label>
-                            <input type="text" 
-                                   id="regFirstName" 
-                                   name="firstName" 
-                                   placeholder="Іван" 
-                                   required>
+                <div class="modal-body">
+                    <form id="questionForm">
+                        <input type="hidden" id="questionId">
+                        <input type="hidden" id="questionTestId">
+                        <div class="form-group">
+                            <label for="questionText">Текст питання *</label>
+                            <textarea id="questionText" rows="3" placeholder="Введіть текст питання" required></textarea>
                         </div>
-                        
-                        <div class="form-group half">
-                            <label for="regLastName">Прізвище</label>
-                            <input type="text" 
-                                   id="regLastName" 
-                                   name="lastName" 
-                                   placeholder="Коваль" 
-                                   required>
+                        <div class="form-group">
+                            <label for="questionType">Тип питання *</label>
+                            <select id="questionType" required>
+                                <option value="single">Один варіант відповіді</option>
+                                <option value="multiple">Кілька варіантів відповіді</option>
+                                <option value="text">Текстова відповідь</option>
+                            </select>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="regEmail">Електронна пошта</label>
-                        <input type="email" 
-                               id="regEmail" 
-                               name="email" 
-                               placeholder="ваш.email@example.com" 
-                               required>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group half">
-                            <label for="regPassword">Пароль</label>
-                            <input type="password" 
-                                   id="regPassword" 
-                                   name="password" 
-                                   placeholder="••••••••" 
-                                   required>
+                        <div id="answersContainerModal">
+                            <!-- Варіанти відповідей завантажуються динамічно -->
                         </div>
-                        
-                        <div class="form-group half">
-                            <label for="regConfirmPassword">Підтвердження пароля</label>
-                            <input type="password" 
-                                   id="regConfirmPassword" 
-                                   name="confirmPassword" 
-                                   placeholder="••••••••" 
-                                   required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="agreeTerms" required>
-                            <span>Я погоджуюсь з <a href="#" class="terms-link">умовами використання</a></span>
-                        </label>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-register">
-                        <span class="btn-text">ЗАРЕЄСТРУВАТИСЯ</span>
-                        <span class="btn-icon">✓</span>
-                    </button>
-                </form>
-            </section>
-        </main>
-
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary modal-close" onclick="closeModal()">Скасувати</button>
+                    <button class="btn-primary" id="saveQuestionBtn">Зберегти питання</button>
+                </div>
+            </div>
+        </div>
+        
         <!-- Футер -->
-        <footer class="main-footer">
-            <div class="footer-line"></div>
-            <p>© 2024 Тестова система GTA 5. Всі права захищено.</p>
-            <p class="footer-note">Система тестування модерації | Ukraine GTA V Project</p>
+        <footer class="footer">
+            <div class="footer-content">
+                <p><i class="fas fa-copyright"></i> 2024 Тестування GTA 5 • Система тестування модерації</p>
+                <p class="footer-note">
+                    <i class="fas fa-shield-alt"></i> Захищена система • Конфіденційність даних
+                </p>
+            </div>
         </footer>
     </div>
 
-    <!-- Підключення JavaScript -->
-    <script src="js/main.js"></script>
+    <!-- Файли JavaScript -->
+    <script src="firebase-config.js"></script>
+    <script src="firebase-service.js"></script>
+    <script src="app.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>
