@@ -1,204 +1,803 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мій особистий посібник</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>U.S. Army — Фракція | Ukraine GTA 5 Manual</title>
+
+  <link rel="stylesheet" href="../styles.css"/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
-    body {
-      font-family: 'Segoe UI', Roboto, sans-serif;
-      margin: 0; padding: 0;
-      background: #f0f2f5;
-      color: #333;
+    :root{
+      --fx-accent: #2b7fff;
+      --fx-accent2:#6c42f5;
+      --fx-green:#00d26a;
+
+      --fx-bg: rgba(255,255,255,.03);
+      --fx-bg2: rgba(255,255,255,.05);
+      --fx-border: rgba(255,255,255,.06);
+      --fx-shadow: 0 14px 34px rgba(0,0,0,.35);
+      --fx-radius: 16px;
     }
-    header {
-      background: #1f2937;
-      color: #fff;
-      padding: 15px 20px;
-      font-size: 20px;
-      font-weight: bold;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+
+    .fx-wrap{ margin-top: 12px; }
+
+    /* Верх фракции */
+    .fx-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 16px;
     }
-    section { padding: 20px; }
-    h2 { margin-top: 0; }
-    form {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      margin-bottom: 15px;
+
+    /* Заголовок + знак */
+    .fx-titlebox{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      min-width: 0;
     }
-    input[type=text] {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      font-size: 14px;
+    .fx-seal{
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display:block;
+      object-fit: cover;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 22px rgba(0,0,0,.22);
+      flex-shrink: 0;
     }
-    button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      background: linear-gradient(90deg, #6366f1, #22d3ee);
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
+
+    .fx-titlewrap{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      min-width: 0;
     }
-    button:hover { filter: brightness(1.1); }
-    #clearBtn {
-      background: #ef4444;
-      margin-bottom: 20px;
+
+    .fx-title{
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin: 0;
+      line-height: 1.15;
+      word-break: break-word;
     }
-    #clearBtn:hover { background: #dc2626; }
-    .candidate {
-      background: #fff;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    .fx-badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,210,106,.12);
+      border: 1px solid rgba(0,210,106,.22);
+      color: #eafff4;
+      font-weight: 800;
+      font-size: .92rem;
     }
-    .candidate h3 { margin-top: 0; }
-    .questionList { list-style: none; padding-left: 0; }
-    .questionList li {
+    .fx-badge i{ color: var(--fx-green); }
+
+    .fx-back{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      text-decoration:none;
+      color:#fff;
+      background: rgba(43,127,255,.10);
+      border: 1px solid rgba(43,127,255,.22);
+      font-weight: 800;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .fx-back:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 12px 22px rgba(0,0,0,.22);
+      background: rgba(43,127,255,.16);
+      border-color: rgba(43,127,255,.35);
+    }
+
+    /* Общая сетка */
+    .fx-grid-2{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .fx-grid-2.tight{ margin-top: 12px; }
+    .fx-grid-1{ margin-top: 14px; }
+
+    /* Карточки/секции */
+    .fx-card{
+      background: var(--fx-bg);
+      border: 1px solid var(--fx-border);
+      border-radius: var(--fx-radius);
+      padding: 16px;
+      position: relative;
+      overflow:hidden;
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .22s ease;
+      min-width: 0;
+    }
+
+    .fx-card:hover{
+      transform: translateY(-4px);
+      box-shadow: var(--fx-shadow);
+      border-color: rgba(43,127,255,.18);
+      background: rgba(255,255,255,.04);
+    }
+
+    .fx-card .fx-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
       margin-bottom: 12px;
-      padding: 10px;
-      background: #f9fafb;
-      border-radius: 8px;
     }
-    .example {
-      display: block;
-      font-style: italic;
-      color: #6b7280;
-      margin-top: 4px;
+    .fx-head-left{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
     }
-    .result {
-      font-weight: bold;
+    .fx-ico{
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      background: linear-gradient(135deg, var(--fx-accent), var(--fx-accent2));
+      flex-shrink: 0;
+    }
+    .fx-h3{
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 900;
+      min-width: 0;
+    }
+    .fx-sub{
+      margin-top: 2px;
+      color: var(--text-gray, #b3b3b3);
+      font-size: .92rem;
+      line-height: 1.5;
+    }
+
+    /* Малые инфо-блоки внутри */
+    .fx-mini-grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
       margin-top: 10px;
-      color: #374151;
+    }
+    .fx-mini{
+      background: var(--fx-bg2);
+      border: 1px solid var(--fx-border);
+      border-radius: 14px;
+      padding: 12px;
+      min-width: 0;
+    }
+    .fx-mini .k{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      font-weight: 900;
+      color: rgba(108,66,245,.95);
+      margin-bottom: 6px;
+      font-size: .95rem;
+    }
+    .fx-mini .v{
+      color: #fff;
+      font-weight: 700;
+      line-height: 1.55;
+      font-size: .97rem;
+    }
+
+    /* Списки */
+    .fx-list{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-gray, #b3b3b3);
+      line-height: 1.7;
+    }
+    .fx-list li{ margin: 4px 0; }
+
+    /* ACCORDION */
+    .fx-acc{
+      background: var(--fx-bg);
+      border: 1px solid var(--fx-border);
+      border-radius: var(--fx-radius);
+      overflow:hidden;
+    }
+
+    .fx-acc-btn{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: transparent;
+      border: 0;
+      cursor:pointer;
+      color:#fff;
+      text-align:left;
+      transition: background .2s ease;
+    }
+    .fx-acc-btn:hover{ background: rgba(255,255,255,.03); }
+
+    .fx-acc-left{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .fx-acc-ico{
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      background: linear-gradient(135deg, var(--fx-accent), var(--fx-accent2));
+      flex-shrink:0;
+    }
+    .fx-acc-title{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .fx-acc-title b{
+      font-size: 1.03rem;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    .fx-acc-title span{
+      color: var(--text-gray, #b3b3b3);
+      font-size: .9rem;
+      line-height: 1.3;
+    }
+
+    .fx-chevron{
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .fx-acc.open .fx-chevron{ transform: rotate(180deg); }
+
+    .fx-acc-panel{
+      display:none;
+      padding: 0 16px 16px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .fx-acc.open .fx-acc-panel{ display:block; }
+
+    /* Таблица рангов */
+    .fx-table{
+      width: 100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      margin-top: 12px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .fx-table th, .fx-table td{
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      vertical-align: top;
+      font-size: .95rem;
+    }
+    .fx-table th{
+      text-align:left;
+      font-weight: 900;
+      color: #fff;
+      background: rgba(43,127,255,.10);
+    }
+    .fx-table tr:last-child td{ border-bottom: 0; }
+
+    .mono{ font-family: "Roboto Mono", monospace; }
+
+    /* Снаряжение: категории */
+    .fx-pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .fx-pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.18);
+      color: #fff;
+      font-weight: 800;
+      font-size: .86rem;
+    }
+
+    /* Автопарк */
+    .fx-gallery{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .fx-veh{
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 14px;
+      overflow:hidden;
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+      cursor: pointer;
+      min-height: 92px;
+    }
+    .fx-veh:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 14px 26px rgba(0,0,0,.25);
+      border-color: rgba(43,127,255,.18);
+    }
+    .fx-veh img{
+      width:100%;
+      height: 110px;
+      object-fit: cover;
+      display:block;
+    }
+    .fx-veh .cap{
+      padding: 10px;
+      color: var(--text-gray, #b3b3b3);
+      font-size: .9rem;
+      line-height: 1.4;
+    }
+
+    /* Лайтбокс */
+    .fx-lightbox{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 5000;
+      padding: 18px;
+    }
+    .fx-lightbox.active{ display:flex; }
+    .fx-lightbox img{
+      max-width: min(1000px, 96vw);
+      max-height: 86vh;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 22px 60px rgba(0,0,0,.45);
+    }
+
+    /* Адаптив */
+    @media (max-width: 980px){
+      .fx-grid-2{ grid-template-columns: 1fr; }
+      .fx-mini-grid{ grid-template-columns: 1fr; }
+      .fx-gallery{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .fx-top{ flex-direction: column; align-items: stretch; }
+      .fx-back{ justify-content:center; }
+      .fx-titlebox{ align-items:flex-start; }
     }
   </style>
 </head>
+
 <body>
-  <header>Мій особистий посібник</header>
 
-  <section id="candidates">
-    <h2>Список кандидатів</h2>
+  <!-- ТВОЙ бургер -->
+  <button class="menu-toggle" id="menuToggle" aria-label="Відкрити меню">
+    <i class="fas fa-bars"></i>
+  </button>
 
-    <form id="addCandidateForm">
-      <input type="text" id="candidateName" placeholder="Ім’я кандидата" required>
-      <button type="submit">Додати кандидата</button>
-    </form>
+  <!-- ТВОЙ sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2 class="brand">UKRAINE GTA 5</h2>
+    </div>
 
-    <button id="clearBtn">Очистити всі дані</button>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="../index.html"><i class="fas fa-house"></i> Головна</a>
+      <a class="nav-item" href="../online.html"><i class="fas fa-clock"></i> Онлайн зміна</a>
+      <a class="nav-item" href="../statute.html"><i class="fas fa-book"></i> Статут</a>
+      <a class="nav-item" href="../penalties.html"><i class="fas fa-gavel"></i> Стягнення</a>
+      <a class="nav-item" href="../inactive.html"><i class="fas fa-box-archive"></i> Неактив</a>
+      <a class="nav-item" href="../personnel.html"><i class="fas fa-users"></i> Склад</a>
+      <a class="nav-item" href="../commands.html"><i class="fas fa-terminal"></i> Команди</a>
+      <a class="nav-item active" href="../fractions.html"><i class="fas fa-shield"></i> Фракції</a>
+      <a class="nav-item" href="../scripts.html"><i class="fas fa-code"></i> Скрипти</a>
+      <a class="nav-item" href="../faq.html"><i class="fas fa-circle-question"></i> FAQ</a>
 
-    <div id="candidateList"></div>
-  </section>
+      <a class="nav-item disabled" data-admin-link="1" href="../admin-panel.html">
+        <i class="fas fa-crown"></i> Адмінка
+      </a>
+    </nav>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="main-content">
+
+    <!-- ТВОЙ хедер -->
+    <header class="user-header">
+      <div class="user-info">
+        <h1 id="welcomeTitle">Вітаємо!</h1>
+        <p>Інформація про фракцію та внутрішні матеріали.</p>
+      </div>
+    </header>
+
+    <!-- Блок фракции -->
+    <div class="main-card">
+      <div class="fx-wrap">
+
+        <div class="fx-top">
+          <div class="fx-titlebox">
+            <img class="fx-seal" src="../assets/factions/army-seal.png" alt="U.S. Army seal">
+            <div class="fx-titlewrap">
+              <h2 class="fx-title">United States Army</h2>
+              <div class="fx-badge"><i class="fas fa-shield-halved"></i> Військова організація</div>
+            </div>
+          </div>
+
+          <a class="fx-back" href="../fractions.html">
+            <i class="fas fa-arrow-left"></i> Назад до списку
+          </a>
+        </div>
+
+        <div class="fx-grid-2">
+          <section class="fx-card">
+            <div class="fx-head">
+              <div class="fx-head-left">
+                <div class="fx-ico"><i class="fas fa-circle-info"></i></div>
+                <div>
+                  <h3 class="fx-h3">Коротко про фракцію</h3>
+                  <div class="fx-sub">Основні факти, роль та вступ</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fx-mini-grid">
+              <div class="fx-mini">
+                <div class="k"><i class="fas fa-tag"></i> Тип організації</div>
+                <div class="v">Військова фракція</div>
+              </div>
+
+              <div class="fx-mini">
+                <div class="k"><i class="fas fa-bullseye"></i> Основна роль</div>
+                <div class="v">
+                  Забезпечення порядку на базі та КПП, участь у спецопераціях,
+                  охорона об’єктів, конвоювання та взаємодія з іншими силовими структурами.
+                </div>
+              </div>
+
+              <div class="fx-mini">
+                <div class="k"><i class="fas fa-person-circle-check"></i> Вступ</div>
+                <div class="v">Через набір / співбесіду / перевірку документів</div>
+              </div>
+
+              <div class="fx-mini">
+                <div class="k"><i class="fas fa-location-dot"></i> Локації</div>
+                <div class="v">База / КПП / полігон / штаб (за сервером)</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="fx-card">
+            <div class="fx-head">
+              <div class="fx-head-left">
+                <div class="fx-ico"><i class="fas fa-building-shield"></i></div>
+                <div>
+                  <h3 class="fx-h3">Про організацію</h3>
+                  <div class="fx-sub">Що представляє собою фракція</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fx-sub" style="font-size: 1rem;">
+              United States Army — військова структура, яка виконує завдання з охорони територій,
+              підтримки порядку, участі у спецопераціях та взаємодії з іншими силовими підрозділами.
+              <br><br>
+              Тут вставляй свій повний текст (як ти хочеш для армії).
+            </div>
+          </section>
+        </div>
+
+        <div class="fx-grid-2">
+          <section class="fx-card">
+            <div class="fx-head">
+              <div class="fx-head-left">
+                <div class="fx-ico"><i class="fas fa-list-check"></i></div>
+                <div>
+                  <h3 class="fx-h3">Основні обов’язки</h3>
+                  <div class="fx-sub">Що робить склад фракції</div>
+                </div>
+              </div>
+            </div>
+
+            <ul class="fx-list">
+              <li>Патрулювання та охорона об’єктів</li>
+              <li>Перевірки на КПП / контроль доступу</li>
+              <li>Взаємодія з LSPD/BCSD/FIB/EMS у спільних ситуаціях</li>
+              <li>Участь у тренуваннях та навчанні новобранців</li>
+              <li>Виконання наказів керівництва та статуту</li>
+            </ul>
+          </section>
+
+          <section class="fx-card">
+            <div class="fx-head">
+              <div class="fx-head-left">
+                <div class="fx-ico"><i class="fas fa-user-shield"></i></div>
+                <div>
+                  <h3 class="fx-h3">Вимоги до вступу</h3>
+                  <div class="fx-sub">Коротко та по ділу</div>
+                </div>
+              </div>
+            </div>
+
+            <ul class="fx-list">
+              <li>Адекватна поведінка та знання базових правил</li>
+              <li>Готовність проходити інструктаж / тренування</li>
+              <li>Відсутність критичних порушень (за рішенням керівництва)</li>
+              <li>Готовність виконувати накази та субординацію</li>
+            </ul>
+
+            <div class="fx-pill-row">
+              <span class="fx-pill"><i class="fas fa-file-signature"></i> Електронні заявки</span>
+              <span class="fx-pill"><i class="fas fa-person-walking"></i> Співбесіда</span>
+              <span class="fx-pill"><i class="fas fa-dumbbell"></i> Basic Combat Training</span>
+            </div>
+          </section>
+        </div>
+
+        <div class="fx-grid-2 tight">
+          <div class="fx-acc" data-acc>
+            <button class="fx-acc-btn" type="button" data-acc-btn>
+              <div class="fx-acc-left">
+                <div class="fx-acc-ico"><i class="fas fa-ranking-star"></i></div>
+                <div class="fx-acc-title">
+                  <b>Ранги та зарплати</b>
+                  <span>Номер ранга • назва • зарплата</span>
+                </div>
+              </div>
+              <div class="fx-chevron"><i class="fas fa-chevron-down"></i></div>
+            </button>
+
+            <div class="fx-acc-panel">
+              <table class="fx-table">
+                <thead>
+                  <tr>
+                    <th style="width: 110px;">№</th>
+                    <th>Ранг</th>
+                    <th style="width: 160px;">Зарплата</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="mono">1</td><td>Private</td><td class="mono">$0</td></tr>
+                  <tr><td class="mono">2</td><td>Corporal</td><td class="mono">$0</td></tr>
+                  <tr><td class="mono">3</td><td>Sergeant</td><td class="mono">$0</td></tr>
+                </tbody>
+              </table>
+
+              <div class="fx-sub" style="margin-top:10px;">
+                * Ти потім просто підставиш правильні ранги та суми.
+              </div>
+            </div>
+          </div>
+
+          <div class="fx-acc" data-acc>
+            <button class="fx-acc-btn" type="button" data-acc-btn>
+              <div class="fx-acc-left">
+                <div class="fx-acc-ico"><i class="fas fa-sitemap"></i></div>
+                <div class="fx-acc-title">
+                  <b>Підрозділи</b>
+                  <span>Delta Force, MP, Academic Corps…</span>
+                </div>
+              </div>
+              <div class="fx-chevron"><i class="fas fa-chevron-down"></i></div>
+            </button>
+
+            <div class="fx-acc-panel">
+              <ul class="fx-list">
+                <li><b>Delta Force</b> — спецпідрозділ для складних операцій.</li>
+                <li><b>Military Police</b> — порядок на базі, КПП, супровід.</li>
+                <li><b>Academic Corps</b> — навчання, інструктаж, підготовка.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-grid-1">
+          <div class="fx-acc" data-acc>
+            <button class="fx-acc-btn" type="button" data-acc-btn>
+              <div class="fx-acc-left">
+                <div class="fx-acc-ico"><i class="fas fa-boxes-stacked"></i></div>
+                <div class="fx-acc-title">
+                  <b>Снаряження зі складу</b>
+                  <span>Зброя • патрони • бронежилети • форма • інше (+ матеріали)</span>
+                </div>
+              </div>
+              <div class="fx-chevron"><i class="fas fa-chevron-down"></i></div>
+            </button>
+
+            <div class="fx-acc-panel">
+              <div class="fx-sub" style="margin-top:10px;">
+                Тут ти зможеш змінювати назви та матеріали як хочеш.
+              </div>
+
+              <table class="fx-table">
+                <thead>
+                  <tr>
+                    <th style="width: 190px;">Категорія</th>
+                    <th>Предмет</th>
+                    <th style="width: 180px;">Матеріали</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><b>Зброя</b></td><td>Carbine Rifle</td><td class="mono">150</td></tr>
+                  <tr><td><b>Зброя</b></td><td>Pistol</td><td class="mono">60</td></tr>
+                  <tr><td><b>Патрони</b></td><td>5.56mm (пачка)</td><td class="mono">20</td></tr>
+                  <tr><td><b>Бронежилети</b></td><td>Armor (Light)</td><td class="mono">40</td></tr>
+                  <tr><td><b>Форма</b></td><td>Uniform Set</td><td class="mono">25</td></tr>
+                  <tr><td><b>Інше</b></td><td>Сухпайок</td><td class="mono">10</td></tr>
+                  <tr><td><b>Інше</b></td><td>Кайданки</td><td class="mono">15</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-grid-1">
+          <section class="fx-card">
+            <div class="fx-head">
+              <div class="fx-head-left">
+                <div class="fx-ico"><i class="fas fa-car-side"></i></div>
+                <div>
+                  <h3 class="fx-h3">Автопарк</h3>
+                  <div class="fx-sub">Натисни на фото, щоб відкрити</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fx-gallery">
+              <div class="fx-veh" data-img="../assets/vehicles/army_1.jpg">
+                <img src="../assets/vehicles/army_1.jpg" alt="vehicle 1">
+                <div class="cap">Vehicle 1</div>
+              </div>
+              <div class="fx-veh" data-img="../assets/vehicles/army_2.jpg">
+                <img src="../assets/vehicles/army_2.jpg" alt="vehicle 2">
+                <div class="cap">Vehicle 2</div>
+              </div>
+              <div class="fx-veh" data-img="../assets/vehicles/army_3.jpg">
+                <img src="../assets/vehicles/army_3.jpg" alt="vehicle 3">
+                <div class="cap">Vehicle 3</div>
+              </div>
+              <div class="fx-veh" data-img="../assets/vehicles/army_4.jpg">
+                <img src="../assets/vehicles/army_4.jpg" alt="vehicle 4">
+                <div class="cap">Vehicle 4</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="fx-grid-1">
+          <section class="fx-card">
+            <div class="fx-head">
+              <div class="fx-head-left">
+                <div class="fx-ico"><i class="fas fa-link"></i></div>
+                <div>
+                  <h3 class="fx-h3">Корисні посилання</h3>
+                  <div class="fx-sub">Сюди просто додаси лінки</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fx-pill-row">
+              <a class="fx-back" style="padding:10px 12px; border-radius:14px;" href="#" target="_blank" rel="noopener">
+                <i class="fas fa-book"></i> Статут фракції
+              </a>
+              <a class="fx-back" style="padding:10px 12px; border-radius:14px;" href="#" target="_blank" rel="noopener">
+                <i class="fas fa-layer-group"></i> Зони ФЗ
+              </a>
+              <a class="fx-back" style="padding:10px 12px; border-radius:14px;" href="#" target="_blank" rel="noopener">
+                <i class="fas fa-file-signature"></i> Електронні заявки
+              </a>
+            </div>
+          </section>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ТВОЯ кнопка выйти -->
+  <button class="logout-btn" id="logoutBtn">
+    <i class="fas fa-right-from-bracket"></i> Вийти
+  </button>
+
+  <!-- ТВОЯ модалка -->
+  <div class="logout-modal" id="logoutModal">
+    <div class="logout-modal-content">
+      <h3>Вийти з акаунту?</h3>
+      <div class="modal-buttons">
+        <button class="modal-btn confirm" id="confirmLogout">Так</button>
+        <button class="modal-btn cancel" id="cancelLogout">Скасувати</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ТВОЙ футер -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p><strong>Ukraine GTA 5</strong> © | Сайт створено Адміністрацією | Контент — <strong>Ukraine GTA 5 Team</strong></p>
+    </div>
+  </footer>
+
+  <!-- Лайтбокс -->
+  <div class="fx-lightbox" id="fxLightbox" aria-hidden="true">
+    <img id="fxLightboxImg" alt="preview">
+  </div>
+
+  <!-- ТВОИ скрипты -->
+  <script type="module" src="../js/firebase.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/guard.js"></script>
+  <script src="../js/ui.js"></script>
 
   <script>
-    let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
-
-    const candidateForm = document.getElementById("addCandidateForm");
-    const candidateList = document.getElementById("candidateList");
-    const clearBtn = document.getElementById("clearBtn");
-
-    function saveData() {
-      localStorage.setItem("candidates", JSON.stringify(candidates));
-    }
-
-    function renderCandidates() {
-      candidateList.innerHTML = "";
-      candidates.forEach((cand, index) => {
-        const div = document.createElement("div");
-        div.className = "candidate";
-        div.innerHTML = `
-          <h3>${cand.name}</h3>
-          <form class="addQuestionForm">
-            <input type="text" class="qText" placeholder="Введіть питання" required>
-            <input type="text" class="qExample" placeholder="Приблизна відповідь (необов’язково)">
-            <label>
-              <input type="checkbox" class="withCheck"> Перевірка
-            </label>
-            <button type="submit">Додати питання</button>
-          </form>
-          <ul class="questionList"></ul>
-          <p class="result">Правильних: ${cand.correct} | Неправильних: ${cand.incorrect}</p>
-        `;
-
-        candidateList.appendChild(div);
-
-        const qForm = div.querySelector(".addQuestionForm");
-        const qList = div.querySelector(".questionList");
-        const result = div.querySelector(".result");
-
-        cand.questions.forEach((q, qIndex) => {
-          const li = document.createElement("li");
-          li.textContent = q.text;
-          if (q.example) {
-            const span = document.createElement("span");
-            span.className = "example";
-            span.textContent = `Приблизна відповідь: ${q.example}`;
-            li.appendChild(span);
-          }
-          if (q.withCheck) {
-            const btnYes = document.createElement("button");
-            btnYes.textContent = "Правильно";
-            btnYes.disabled = q.answered;
-            btnYes.onclick = () => {
-              if (!q.answered) {
-                cand.correct++;
-                q.answered = true;
-                saveData();
-                renderCandidates();
-              }
-            };
-
-            const btnNo = document.createElement("button");
-            btnNo.textContent = "Неправильно";
-            btnNo.disabled = q.answered;
-            btnNo.onclick = () => {
-              if (!q.answered) {
-                cand.incorrect++;
-                q.answered = true;
-                saveData();
-                renderCandidates();
-              }
-            };
-
-            li.appendChild(btnYes);
-            li.appendChild(btnNo);
-          }
-          qList.appendChild(li);
-        });
-
-        qForm.addEventListener("submit", ev => {
-          ev.preventDefault();
-          const text = qForm.querySelector(".qText").value;
-          const example = qForm.querySelector(".qExample").value;
-          const withCheck = qForm.querySelector(".withCheck").checked;
-
-          cand.questions.push({ text, example, withCheck, answered: false });
-          saveData();
-          renderCandidates();
-        });
-      });
-    }
-
-    candidateForm.addEventListener("submit", e => {
-      e.preventDefault();
-      const name = document.getElementById("candidateName").value;
-      candidates.push({ name, questions: [], correct: 0, incorrect: 0 });
-      saveData();
-      renderCandidates();
-      candidateForm.reset();
+    // --- Accordions ---
+    document.querySelectorAll('[data-acc]').forEach(acc => {
+      const btn = acc.querySelector('[data-acc-btn]');
+      if (!btn) return;
+      btn.addEventListener('click', () => acc.classList.toggle('open'));
     });
 
-    clearBtn.addEventListener("click", () => {
-      if (confirm("Очистити всі дані?")) {
-        candidates = [];
-        saveData();
-        renderCandidates();
+    // --- Gallery lightbox ---
+    const lb = document.getElementById('fxLightbox');
+    const lbImg = document.getElementById('fxLightboxImg');
+
+    document.querySelectorAll('.fx-veh').forEach(card => {
+      card.addEventListener('click', () => {
+        const src = card.getAttribute('data-img');
+        if (!src) return;
+        lbImg.src = src;
+        lb.classList.add('active');
+        lb.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    lb.addEventListener('click', () => {
+      lb.classList.remove('active');
+      lb.setAttribute('aria-hidden', 'true');
+      lbImg.src = '';
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        lb.classList.remove('active');
+        lb.setAttribute('aria-hidden', 'true');
+        lbImg.src = '';
       }
     });
-
-    renderCandidates();
   </script>
+
 </body>
 </html>
