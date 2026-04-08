@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Адмінка | Оцінка модерів</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Адмін-панель</h1>
+        <div class="card">
+            <input type="password" id="adminPass" placeholder="Пароль">
+            <button id="loginBtn">Увійти</button>
+            <div id="adminPanel" style="display:none;">
+                <h2>Список відгуків</h2>
+                <div id="adminReviews"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('loginBtn').onclick = async () => {
+            const pass = document.getElementById('adminPass').value;
+            if (pass !== 'admin123') return alert('Невірний пароль');
+            document.getElementById('adminPanel').style.display = 'block';
+            loadReviews();
+        };
+        
+        async function loadReviews() {
+            const res = await fetch('/api/reviews');
+            const reviews = await res.json();
+            const container = document.getElementById('adminReviews');
+            container.innerHTML = reviews.map(r => `
+                <div class="review-item">
+                    <div><strong>${r.nickname}</strong> → ${r.moderName} | ⭐${r.rating}</div>
+                    <div>${r.comment || ''}</div>
+                    <div>🚨 Скарг: ${r.complaints || 0}</div>
+                    <button onclick="deleteReview(${r.id})">🗑️ Видалити</button>
+                </div>
+            `).join('');
+        }
+        
+        async function deleteReview(id) {
+            const pass = document.getElementById('adminPass').value;
+            await fetch('/api/admin/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass, reviewId: id })
+            });
+            loadReviews();
+        }
+    </script>
+</body>
+</html>
