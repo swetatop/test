@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Оценка модеров | Ukraine GTA 5</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://www.ukraine-gta5.com.ua/favicon.ico" alt="Лого" class="logo" onerror="this.style.display='none'">
+            <h1>Оценка работы модеров Discord 🛡️</h1>
+            <p>Проект: <a href="https://ukraine-gta5.com.ua" target="_blank">ukraine-gta5.com.ua</a></p>
+        </header>
 
+        <!-- Форма отправки оценки -->
+        <div class="card">
+            <h2>Оставить отзыв о модерані</h2>
+            <form id="ratingForm">
+                <input type="text" id="nickname" placeholder="Твій нікнейм" required maxlength="30">
+                
+                <select id="moderName" required>
+                    <option value="">Выбери модера</option>
+                    <option value="AdminAlex">AdminAlex</option>
+                    <option value="ModerKate">ModerKate</option>
+                    <option value="GTA_Vlad">GTA_Vlad</option>
+                    <option value="HelperOleg">HelperOleg</option>
+                </select>
+
+                <div class="rating-stars">
+                    <span>Оцінка:</span>
+                    <div class="stars" id="starRating">
+                        ★★★★★
+                    </div>
+                    <input type="hidden" id="ratingValue" value="0">
+                </div>
+
+                <textarea id="comment" placeholder="Коментар (не обов'язково)" rows="3"></textarea>
+                
+                <button type="submit">📩 Відправити відгук</button>
+            </form>
+            <div id="formMessage" class="message"></div>
+        </div>
+
+        <!-- Список отзывов -->
+        <div class="card">
+            <h2>Відгуки гравців</h2>
+            <div id="reviewsList">
+                <p>Завантаження...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
