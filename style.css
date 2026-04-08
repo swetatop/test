@@ -3,18 +3,66 @@
     padding: 0;
     box-sizing: border-box;
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    transition: background 0.3s, color 0.2s;
+}
+
+[data-theme="dark"] {
+    --bg: #0a0f1e;
+    --card: rgba(20, 30, 45, 0.92);
+    --text: #eee;
+    --border: rgba(255, 200, 100, 0.2);
+    --input: #1e2a3a;
+    --accent: #ffaa44;
+}
+
+[data-theme="light"] {
+    --bg: #f0f2f5;
+    --card: rgba(255, 255, 255, 0.95);
+    --text: #1a1a2e;
+    --border: #ddd;
+    --input: #fff;
+    --accent: #ff8c00;
 }
 
 body {
-    background: linear-gradient(135deg, #0a0f1e 0%, #0a1a2e 100%);
-    color: #eee;
+    background: var(--bg);
+    color: var(--text);
     padding: 20px;
     min-height: 100vh;
+    position: relative;
+}
+
+.bg-logo {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 200px;
+    height: 200px;
+    background: url('https://www.ukraine-gta5.com.ua/favicon.ico') no-repeat center;
+    background-size: contain;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    font-size: 24px;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
 }
 
 header {
@@ -25,82 +73,65 @@ header {
 .logo {
     width: 60px;
     height: 60px;
-    object-fit: contain;
     margin-bottom: 10px;
 }
 
 h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     background: linear-gradient(135deg, #ffb347, #ff6b6b);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    margin-bottom: 8px;
-}
-
-header a {
-    color: #ffaa44;
-    text-decoration: none;
 }
 
 .card {
-    background: rgba(20, 30, 45, 0.85);
+    background: var(--card);
     backdrop-filter: blur(8px);
     border-radius: 24px;
-    padding: 20px;
+    padding: 24px;
     margin-bottom: 25px;
-    border: 1px solid rgba(255, 200, 100, 0.2);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
-h2 {
-    margin-bottom: 18px;
-    font-size: 1.5rem;
-    border-left: 5px solid #ffaa44;
-    padding-left: 15px;
+.moder-cards {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 15px 0;
 }
 
-input, select, textarea, button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0 16px;
-    border-radius: 16px;
-    border: none;
-    font-size: 1rem;
-}
-
-input, select, textarea {
-    background: #1e2a3a;
-    color: white;
-    border: 1px solid #3a4a5a;
-}
-
-button {
-    background: linear-gradient(95deg, #ff8c00, #ff2d4a);
-    color: white;
-    font-weight: bold;
+.moder-card {
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+    padding: 15px;
+    background: var(--input);
+    border-radius: 20px;
     cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s;
-    border: none;
+    border: 2px solid transparent;
+    transition: all 0.2s;
 }
 
-button:hover {
-    opacity: 0.9;
-    transform: scale(1.01);
+.moder-card.selected {
+    border-color: var(--accent);
+    background: rgba(255, 170, 68, 0.2);
 }
 
-/* Звездочки рейтинга */
+.moder-avatar {
+    font-size: 40px;
+}
+
+.moder-name {
+    font-weight: bold;
+    margin-top: 8px;
+}
+
 .stars {
     font-size: 2.2rem;
     letter-spacing: 5px;
-    color: #555;
     cursor: pointer;
-    user-select: none;
     display: inline-block;
-}
-
-.stars:hover {
-    color: #ffaa44;
 }
 
 .star-active {
@@ -108,18 +139,75 @@ button:hover {
     text-shadow: 0 0 5px orange;
 }
 
-.rating-stars span {
-    margin-right: 15px;
+.captcha {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    align-items: center;
+}
+
+.captcha span {
+    background: var(--accent);
+    padding: 10px 15px;
+    border-radius: 12px;
     font-weight: bold;
 }
 
-/* Отзывы */
+input, select, textarea, button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--input);
+    color: var(--text);
+}
+
+button {
+    background: linear-gradient(95deg, #ff8c00, #ff2d4a);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.spinner.hidden {
+    display: none;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.moder-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.stat-item {
+    flex: 1;
+    background: var(--input);
+    padding: 12px;
+    border-radius: 16px;
+    text-align: center;
+}
+
 .review-item {
-    background: #0f1a24;
+    background: var(--input);
     border-radius: 20px;
     padding: 15px;
     margin-bottom: 15px;
-    border-left: 5px solid #ffaa44;
+    position: relative;
 }
 
 .review-header {
@@ -127,55 +215,19 @@ button:hover {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 8px;
-    font-weight: bold;
 }
 
-.review-moder {
-    color: #ffaa66;
-}
-
-.review-rating {
-    color: gold;
-}
-
-.review-comment {
-    color: #ccc;
-    margin: 8px 0;
-    font-style: italic;
-}
-
-.review-date {
-    font-size: 0.75rem;
-    color: #888;
-    text-align: right;
-}
-
-.message {
-    margin-top: 12px;
-    padding: 10px;
-    border-radius: 14px;
-    text-align: center;
-}
-
-.success {
-    background: #1e4a2e;
-    color: #b0ffb0;
-}
-
-.error {
-    background: #7a2e2e;
-    color: #ffb0b0;
+.complaint-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+    width: auto;
+    color: #ff6666;
 }
 
 @media (max-width: 600px) {
-    body {
-        padding: 12px;
-    }
-    h1 {
-        font-size: 1.4rem;
-    }
-    .stars {
-        font-size: 1.8rem;
-    }
+    .moder-cards { gap: 8px; }
+    .moder-card { min-width: 70px; padding: 10px; }
 }
