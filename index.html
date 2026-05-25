@@ -1,4 +1,107 @@
 <!DOCTYPE html>
+
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Crime | Ukraine GTA V</title>
+
+<link rel="icon" type="image/png" href="https://i.imgur.com/0VNNTKc.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="style.css?v=2">
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+</head>
+
+<body>
+
+<div class="bg-logos">
+<img src="https://i.imgur.com/0VNNTKc.png" class="bg-logo">
+<img src="https://i.imgur.com/0VNNTKc.png" class="bg-logo">
+<img src="https://i.imgur.com/0VNNTKc.png" class="bg-logo">
+<img src="https://i.imgur.com/0VNNTKc.png" class="bg-logo">
+<img src="https://i.imgur.com/0VNNTKc.png" class="bg-logo">
+<img src="https://i.imgur.com/0VNNTKc.png" class="bg-logo">
+<img src="https://i.imgur.com/0VNNTKc.png" class="bg-logo">
+<img src="https://i.imgur.com/0VNNTKc.png" class="bg-logo">
+</div>
+
+<header class="topbar">
+
+<div class="topbar-inner">
+
+<div class="logo">
+
+<div class="logo-icon">
+<img src="https://i.imgur.com/0VNNTKc.png" class="site-logo">
+</div>
+
+<div class="logo-text">
+<h1>Crime Panel</h1>
+<p>Ukraine GTA V • Official Crime Management</p>
+</div>
+
+</div>
+
+<div class="live-badge">
+<span class="live-dot"></span>
+Realtime sync active
+</div>
+
+</div>
+
+</header>
+
+<div class="wrapper">
+
+<section class="hero">
+
+<div class="hero-badge">
+LIVE MODERATION SYSTEM
+</div>
+
+<h2>CRIME System Panel</h2>
+
+<p>
+Управління Crime звітністю для фракцій Ukraine GTA V.
+</p>
+
+<div class="hero-stats">
+
+<div class="stat-card">
+<div class="stat-number" id="activeRequests">23</div>
+<div class="stat-label">Active requests</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number">12</div>
+<div class="stat-label">Moderators online</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number">2s</div>
+<div class="stat-label">Last sync</div>
+</div>
+
+</div>
+
+</section>
+
+<section class="categories">
+
+<div class="category active" data-category="capt">
+<i class="fa-solid fa-camera"></i>
 <h3>Capture</h3>
 </div>
 
@@ -23,8 +126,9 @@
 
 <div class="panel-header">
 
-<div>
+<div class="panel-title-wrap">
 <div class="panel-subtitle">Realtime activity</div>
+
 <div class="panel-title" id="panelTitle">
 <i class="fa-solid fa-camera"></i>
 Capture
@@ -35,10 +139,20 @@ Capture
 
 <select id="initiatorFilter" class="filter-select">
 <option value="all">Усі ініціатори</option>
+<option>The Ballas Gang🟣</option>
+<option>The Vagos Gang🟡</option>
+<option>The Marabunta Gang🔵</option>
+<option>The Families Gang🟢</option>
+<option>The Bloods Gang🔴</option>
 </select>
 
 <select id="defenderFilter" class="filter-select">
 <option value="all">Усі захисники</option>
+<option>The Ballas Gang🟣</option>
+<option>The Vagos Gang🟡</option>
+<option>The Marabunta Gang🔵</option>
+<option>The Families Gang🟢</option>
+<option>The Bloods Gang🔴</option>
 </select>
 
 <button class="create-btn" id="createBtn">
@@ -50,23 +164,51 @@ Capture
 
 </div>
 
-<div class="requests" id="requestsContainer"></div>
+<div class="requests" id="requestsContainer">
+
+<div class="empty-state">
+
+<div class="empty-icon">
+<i class="fa-regular fa-folder-open"></i>
+</div>
+
+<h3>Наразі активних звернень немає</h3>
+
+<p>
+Нові заявки з’являться тут автоматично.
+</p>
+
+<button class="create-btn">
+Створити заявку
+</button>
+
+</div>
+
+</div>
 
 </section>
 
 </div>
 
 <div class="modal" id="modal">
+
 <div class="modal-card">
-<div class="modal-header">Нова заявка</div>
+
+<div class="modal-header">
+Нова заявка
+</div>
+
 <div class="modal-body" id="modalBody"></div>
-</div>
+
 </div>
 
-<div id="toastContainer"></div>
+</div>
 
-<script src="js/ui.js"></script>
-<script src="js/app.js"></script>
+<footer class="site-footer">
+Idea: <b style="color:#377dff">Rikler</b>. Created by <b style="color:#377dff">Perets</b>
+</footer>
+
+<script src="app.js"></script>
 
 </body>
 </html>
